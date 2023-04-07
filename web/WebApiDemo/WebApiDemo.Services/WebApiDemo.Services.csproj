@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="IServices\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebApiDemo.Repository\WebApiDemo.Repository.csproj" />
   </ItemGroup>
 
 </Project>

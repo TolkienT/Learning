@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiDemo.Extensions;
 
 namespace WebApiDemo
 {
@@ -27,6 +28,8 @@ namespace WebApiDemo
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddSqlSugarSetup();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -36,7 +39,7 @@ namespace WebApiDemo
 
         public void ConfigureContainer(ContainerBuilder containerBuilder)
         {
-
+            containerBuilder.RegisterModule(new AutofacModuleRegister());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -19,7 +19,7 @@ namespace WebApiDemo
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            //autofac
+            //这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
