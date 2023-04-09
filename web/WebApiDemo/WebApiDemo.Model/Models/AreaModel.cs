@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace WebApiDemo.Model.Models
 {
     [SugarTable("area")]
-    public class Area
+    public class AreaModel
     {
         [SugarColumn(IsPrimaryKey =true,IsIdentity =true,ColumnName ="id")]
         public int Id { get; set; }

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="IRepositories\" />
+    <ProjectReference Include="..\WebApiDemo.Model\WebApiDemo.Model.csproj" />
   </ItemGroup>
 
 </Project>
