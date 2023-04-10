@@ -10,16 +10,16 @@ namespace WebApiDemo.Services.Services.Base
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : class, new()
     {
-        private readonly IBaseRepository<TEntity> _dal;
+        public IBaseRepository<TEntity> _baseDal { get; set; }//通过在子类的构造函数中注入，这里是基类，不用构造函数
 
-        public BaseService(IBaseRepository<TEntity> dal)
+        public BaseService(IBaseRepository<TEntity> baseDal)
         {
-            _dal = dal;
+            _baseDal = baseDal;
         }
 
         public async Task<bool> Add(TEntity model)
         {
-            return await _dal.Add(model);
+            return await _baseDal.Add(model);
         }
     }
 }

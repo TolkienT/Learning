@@ -10,8 +10,8 @@ namespace WebApiDemo.Model.Models
     [SugarTable("area")]
     public class AreaModel
     {
-        [SugarColumn(IsPrimaryKey =true,IsIdentity =true,ColumnName ="id")]
-        public int Id { get; set; }
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true, ColumnName = "id")]
+        public int Id { get; set; } = 1;
         [SugarColumn(ColumnName = "area_name")]
         public string AreaName { get; set; }
         [SugarColumn(ColumnName = "area_code")]

@@ -6,15 +6,18 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WebApiDemo.Repository.IRepositories.Base;
+using WebApiDemo.Repository.Repositories.Base;
 
 namespace WebApiDemo.Extensions
 {
     public class AutofacModuleRegister : Autofac.Module
     {
 
-
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterGeneric(typeof(BaseRepository<>)).As(typeof(IBaseRepository<>)).InstancePerDependency();//注册仓储
+
             //注册service
             var assemblysServices = Assembly.Load("WebApiDemo.Services");
             builder.RegisterAssemblyTypes(assemblysServices)

@@ -12,9 +12,9 @@ namespace WebApiDemo.Controllers
     [Route("api/[controller]/[action]")]
     public class AreaController
     {
-        private readonly IBaseService<AreaModel> _areaService;
+        private readonly IAreaService _areaService;
         //private readonly IAreaService _areaService;
-        public AreaController(IBaseService<AreaModel> areaService)
+        public AreaController(IAreaService areaService)
         {
             _areaService = areaService;
         }

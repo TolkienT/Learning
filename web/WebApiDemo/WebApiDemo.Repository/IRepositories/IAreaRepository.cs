@@ -8,8 +8,8 @@ using WebApiDemo.Repository.IRepositories.Base;
 
 namespace WebApiDemo.Repository.IRepositories
 {
-    public interface IAreaRepository/*: IBaseRepository<AreaModel>*/
+    public interface IAreaRepository : IBaseRepository<AreaModel>
     {
-        public string Test();
+
     }
 }

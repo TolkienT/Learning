@@ -12,6 +12,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApiDemo.Extensions;
+using WebApiDemo.Model.Db;
+using WebApiDemo.Model.Models;
+using WebApiDemo.Services.IServices.Base;
+using WebApiDemo.Services.Services.Base;
 
 namespace WebApiDemo
 {
@@ -28,7 +32,11 @@ namespace WebApiDemo
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSqlSugarSetup();
+            //services.AddSqlSugarSetup();
+
+            //services.AddScoped<IBaseService<AreaModel>, BaseService<AreaModel>>();
+
+            BaseDBConfig.ConnectionString = Configuration.GetSection("DBS:Connection").Value;
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
