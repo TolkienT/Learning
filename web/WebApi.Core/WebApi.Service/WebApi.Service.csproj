@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--<Nullable>enable</Nullable>-->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebApi.IService\WebApi.IService.csproj" />
+    <ProjectReference Include="..\WebApi.Repository\WebApi.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
