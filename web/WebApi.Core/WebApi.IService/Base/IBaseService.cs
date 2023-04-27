@@ -11,6 +11,8 @@ namespace WebApi.IService.Base
     {
         Task<bool> Add(TEntity model);
 
+        Task<IEnumerable<TEntity>> Query();
+
         Task<IEnumerable<TEntity>> Query(Expression<Func<TEntity, bool>> lambda);
 
         Task<bool> Delete(TEntity model);

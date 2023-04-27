@@ -25,9 +25,14 @@ namespace WebApi.Repository.Base
 
         }
 
-        public async Task<IEnumerable<TEntity>> Query(Expression<Func<TEntity, bool>> lambda)
+        public async Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> lambda)
         {
             return await _db.Queryable<TEntity>().WhereIF(lambda is not null, lambda).ToListAsync();
+        }
+
+        public async Task<List<TEntity>> Query()
+        {
+            return await _db.Queryable<TEntity>().ToListAsync();
         }
     }
 }

@@ -42,5 +42,10 @@ namespace WebApi.Service.Sys
             return await _userRepo.Register(user, security);
 
         }
+
+        public async Task<bool> UpdateUser(UpdateUserDto dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

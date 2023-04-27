@@ -13,5 +13,6 @@ namespace WebApi.IService.Sys
     public interface IUserService : IBaseService<UserEntity>
     {
         Task<bool> Register(UserRegisterDto dto);
+        Task<bool> UpdateUser(UpdateUserDto dto);
     }
 }

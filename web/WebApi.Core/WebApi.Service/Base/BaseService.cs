@@ -23,6 +23,10 @@ namespace WebApi.Service.Base
             return await _baseDal.Add(model);
         }
 
+        public async Task<IEnumerable<TEntity>> Query()
+        {
+            return await _baseDal.Query();
+        }
         public async Task<IEnumerable<TEntity>> Query(Expression<Func<TEntity, bool>> lambda)
         {
             return await _baseDal.Query(lambda);
@@ -32,5 +36,7 @@ namespace WebApi.Service.Base
         {
             return await _baseDal.Delete(model);
         }
+
+
     }
 }
