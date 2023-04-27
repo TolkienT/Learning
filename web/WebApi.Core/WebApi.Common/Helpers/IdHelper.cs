@@ -18,6 +18,10 @@ namespace WebApi.Common.Helpers
 
         public static long GetSnowflakeId()
         {
+            if(worker is null)
+            {
+                worker = new IdWorker(1, 1);
+            }
             return worker.NextId();
         }
     }

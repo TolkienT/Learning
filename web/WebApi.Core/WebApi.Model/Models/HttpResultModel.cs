@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebApi.Model.Enums;
 
 namespace WebApi.Model.Models
 {
     public class HttpResultModel<T>
     {
-        public int Status { get; set; } = 200;
+        public HttpResultStatus Status { get; set; } = HttpResultStatus.OK;
         public string Message { get; set; }
         public T Data { get; set; }
         public HttpResultModel()
         {
 
         }
-        public HttpResultModel(string message, T data)
+        public HttpResultModel(string message, T data, HttpResultStatus status = HttpResultStatus.OK)
         {
+            Status = status;
             Message = message;
             Data = data;
         }

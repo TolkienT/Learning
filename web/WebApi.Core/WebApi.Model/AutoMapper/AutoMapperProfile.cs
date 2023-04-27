@@ -14,6 +14,7 @@ namespace WebApi.Model.AutoMapper
         public AutoMapperProfile()
         {
             CreateMap<UserEntity, UserDto>().ForMember(x => x.UserId, a => a.MapFrom(entity => entity.Id));
+            CreateMap<UserRegisterDto, UserEntity>();
         }
 
     }
