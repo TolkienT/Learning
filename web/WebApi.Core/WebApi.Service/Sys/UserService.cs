@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WebApi.IRepository.Base;
@@ -27,6 +28,11 @@ namespace WebApi.Service.Sys
         {
             _mapper = mapper;
             _userRepo = userRepo;
+        }
+
+        public async Task<UserEntity> GetUser(Expression<Func<UserEntity, bool>> lambda)
+        {
+            return await _baseDal.First(lambda);
         }
 
         public async Task<bool> Register(UserRegisterDto dto)

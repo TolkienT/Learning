@@ -1,25 +1,23 @@
 <template>
-    <div class="login"> 
+    <div class="login">
         <Particles id="tsparticles" :particlesInit="particlesInit" class="login__particles" :options="options" />
         <div class="loginPart">
             <h2>用户登录</h2>
-            <el-form ref="ruleFormRef"  status-icon :rules="rules" label-width="100px" class="demo-ruleForm"
+            <el-form ref="ruleFormRef" status-icon :rules="rules" label-width="100px" class="demo-ruleForm"
                 style="transform:translate(-30px);">
-                <el-form-item label="账号：" prop="account">
-                    <el-input placeholder="请输入账号" maxlength="20" clearable />
+                <el-form-item prop="account">
+                    <el-input class="input" placeholder="请输入账号" maxlength="20" clearable />
                 </el-form-item>
-                <el-form-item label="密码：" prop="password">
-                    <el-input  type="password" placeholder="请输入密码" maxlength="20" show-password
-                        clearable />
+                <el-form-item prop="password">
+                    <el-input type="password" placeholder="请输入密码" maxlength="20" show-password clearable />
                 </el-form-item>
-                <el-form-item label="验证码：" prop="verifyCode">
-                    <el-input style="width: 150px;" placeholder="请输入验证码" maxlength="4"
-                        clearable />
-                    <img class="verifyCodeImg" >
+                <el-form-item prop="verifyCode">
+                    <el-input placeholder="请输入验证码" maxlength="4" clearable />
+                    <img class="verifyCodeImg">
                 </el-form-item>
                 <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
                 <div style="text-align: right;transform:translate(0,30px);">
-                    <el-link type="warning" @click="changeRegist">没有账号？去注册</el-link>
+                    <el-link class="link" type="warning" @click="changeRegist">没有账号？去注册</el-link>
                 </div>
             </el-form>
         </div>
@@ -31,14 +29,14 @@ import { reactive, ref, onMounted } from 'vue'
 import router from '@/router/index'
 import { loadFull } from "tsparticles"
 import type { Engine } from 'tsparticles-engine'
-// import { login } from '@/api/Login'
+import { login } from '@/api/security/user';
 // import { tokenStore, accountStore } from '@/store/modules/user'
 // import { loginReq } from '@/api/types/loginReq'
 import type { FormInstance } from 'element-plus'
 // import { encode, decode } from 'js-base64';
 
-const particlesInit = async (engine:Engine) => {
-  await loadFull(engine)
+const particlesInit = async (engine: Engine) => {
+    await loadFull(engine)
 }
 
 
@@ -95,8 +93,24 @@ const changeRegist = () => {
 // }
 
 const onSubmit = (formEl: FormInstance | undefined) => {
+    var model={
+            UserName:'tang.zx',
+            Password:'qwe123'
+        }
+        login(model).then((res)=>{
+            debugger
+            console.log(res)
+        })
     if (!formEl) return
     formEl.validate((valid) => {
+        var model={
+            UserName:'tang.zx',
+            Password:'qwe123'
+        }
+        login(model).then((res)=>{
+            debugger
+            console.log(res)
+        })
         // if (valid) {
         //     Object.keys(user).forEach((key) => {
         //         if (key == 'account' || key == 'password') {
@@ -212,56 +226,5 @@ const options = {
 </script>
 
 <style scoped>
-.login {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-}
-
-.login__particles {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url('@/assets/KochouShinobu.jpeg');
-    opacity: 0.9;
-    position: fixed;
-    pointer-events: none;
-}
-
-.loginPart {
-    position: absolute;
-    /*定位方式绝对定位absolute*/
-    top: 50%;
-    left: 80%;
-    /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
-    transform: translate(-50%, -50%);
-    /*实现块元素百分比下居中*/
-    width: 450px;
-    padding: 50px;
-    background: rgba(255, 204, 255, .3);
-    /*背景颜色为黑色，透明度为0.8*/
-    box-sizing: border-box;
-    /*box-sizing设置盒子模型的解析模式为怪异盒模型，
-    将border和padding划归到width范围内*/
-    box-shadow: 0px 15px 25px rgba(0, 0, 0, .5);
-    /*边框阴影  水平阴影0 垂直阴影15px 模糊25px 颜色黑色透明度0.5*/
-    border-radius: 15px;
-    /*边框圆角，四个角均为15px*/
-}
-
-h2 {
-    margin: 0 0 30px;
-    padding: 0;
-    color: #fff;
-    text-align: center;
-    /*文字居中*/
-}
-
-.btn {
-    transform: translate(170px);
-    width: 80px;
-    height: 40px;
-    font-size: 15px;
-}
+@import "../assets/styles/login.scss";
 </style>

@@ -13,5 +13,6 @@ namespace WebApi.IRepository.Base
         Task<List<TEntity>> Query();
         Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> lambda);
         Task<bool> Delete(TEntity model);
+        Task<TEntity> First(Expression<Func<TEntity, bool>> lambda);
     }
 }

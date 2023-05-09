@@ -53,6 +53,35 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddTransient<IMapper, Mapper>();
 #endregion
 
+#region CORS
+builder.Services.AddCors(options =>
+{
+    if (Appsettings.GetApp(new string[] { "Cors", "EnableAllIPs" }) == "1")
+    {
+        options.AddPolicy(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }), policy =>
+        {
+            policy
+                            .WithOrigins(Appsettings.GetApp(new string[] { "Cors", "IPs" }).Split(','))
+                            .AllowAnyHeader()//Ensures that the policy allows any header.
+                            .AllowAnyMethod();
+        });
+    }
+    else
+    {
+        //允许任意跨域请求
+        options.AddPolicy(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }),
+            policy =>
+            {
+                policy
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+            });
+    }
+});
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -61,6 +90,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }));
 
 app.UseAuthorization();
 

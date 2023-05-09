@@ -34,5 +34,12 @@ namespace WebApi.Repository.Base
         {
             return await _db.Queryable<TEntity>().ToListAsync();
         }
+
+        public async Task<TEntity> First(Expression<Func<TEntity, bool>> lambda)
+        {
+            if (lambda is not null)
+                return await _db.Queryable<TEntity>().FirstAsync(lambda);
+            return null;
+        }
     }
 }

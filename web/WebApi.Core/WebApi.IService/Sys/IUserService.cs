@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using WebApi.IService.Base;
@@ -14,5 +15,6 @@ namespace WebApi.IService.Sys
     {
         Task<bool> Register(UserRegisterDto dto);
         Task<bool> UpdateUser(UpdateUserDto dto);
+        Task<UserEntity> GetUser(Expression<Func<UserEntity, bool>> lambda);
     }
 }

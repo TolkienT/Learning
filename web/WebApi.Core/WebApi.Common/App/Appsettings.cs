@@ -30,6 +30,21 @@ namespace WebApi.Common.App
             return string.Empty;
         }
 
+        public static string GetApp(params string[] sections)
+        {
+            try
+            {
+
+                if (sections.Any())
+                {
+                    return Configuration[string.Join(":", sections)];
+                }
+            }
+            catch (Exception) { }
+
+            return "";
+        }
+
         public static List<T> GetApp<T>(params string[] sections)
         {
             try
