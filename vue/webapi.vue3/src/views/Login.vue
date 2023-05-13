@@ -1,18 +1,25 @@
 <template>
+    <header>
+        <title>登录</title>
+    </header>
+
     <div class="login">
         <Particles id="tsparticles" :particlesInit="particlesInit" class="login__particles" :options="options" />
         <div class="loginPart">
             <h2>用户登录</h2>
-            <el-form ref="ruleFormRef" status-icon :rules="rules" label-width="100px" class="demo-ruleForm"
+            <el-form ref="ruleFormRef" status-icon :rules="rules" :model="user" label-width="100px"
                 style="transform:translate(-30px);">
-                <el-form-item prop="account">
-                    <el-input class="input" placeholder="请输入账号" maxlength="20" clearable />
+                <!-- el-from-item 的 prop 属性必须与 el-input 中需要校验的表单属性一致 -->
+                <el-form-item prop="userName">
+                    <!-- 如果要用 rules 进行表单校验，那么 el-input 绑定的元素必须是 el-form 的 model 的直接属性，否则会导致校验失败 -->
+                    <el-input class="input" v-model="user.userName" placeholder="请输入账号" maxlength="20" clearable />
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" placeholder="请输入密码" maxlength="20" show-password clearable />
+                    <el-input type="password" v-model="user.password" placeholder="请输入密码" maxlength="20" show-password
+                        clearable />
                 </el-form-item>
                 <el-form-item prop="verifyCode">
-                    <el-input placeholder="请输入验证码" maxlength="4" clearable />
+                    <el-input placeholder="请输入验证码" v-model="user.verifyCode" maxlength="4" clearable />
                     <img class="verifyCodeImg">
                 </el-form-item>
                 <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
@@ -30,15 +37,12 @@ import router from '@/router/index'
 import { loadFull } from "tsparticles"
 import type { Engine } from 'tsparticles-engine'
 import { login } from '@/api/security/user';
-// import { tokenStore, accountStore } from '@/store/modules/user'
-// import { loginReq } from '@/api/types/loginReq'
 import type { FormInstance } from 'element-plus'
-// import { encode, decode } from 'js-base64';
+import { ElMessage } from "element-plus";
 
 const particlesInit = async (engine: Engine) => {
     await loadFull(engine)
 }
-
 
 onMounted(() => {
 
@@ -46,33 +50,29 @@ onMounted(() => {
 //from表单校验
 const ruleFormRef = ref<FormInstance>()
 // 这里存放数据
-// const user = reactive<loginReq>({
-//     account: '',
-//     password: '',
-//     verifyCode: ''
-// })
-// const users = reactive<loginReq>({
-//     account: '',
-//     password: '',
-//     verifyCode: ''
-// })
+const user = reactive({
+    userName: '',
+    password: '',
+    verifyCode: ''
+})
+
 //校验
 const validatePassword = (rule: any, value: any, callback: any) => {
-    if (value === '') {
+    if (value === '' || value === null) {
         callback(new Error('请输入密码'))
     } else {
         callback()
     }
 }
 const validateAccount = (rule: any, value: any, callback: any) => {
-    if (value === '') {
+    if (value === '' || value === null) {
         callback(new Error('请输入账号'))
     } else {
         callback()
     }
 }
 const validateVerification = (rule: any, value: any, callback: any) => {
-    if (value === '') {
+    if (value === '' || value === null) {
         callback(new Error('请输入验证码'))
     } else {
         callback()
@@ -81,66 +81,37 @@ const validateVerification = (rule: any, value: any, callback: any) => {
 //校验
 const rules = reactive({
     password: [{ validator: validatePassword, trigger: 'blur' }],
-    account: [{ validator: validateAccount, trigger: 'blur' }],
+    userName: [{ validator: validateAccount, trigger: 'blur' }],
     verifyCode: [{ validator: validateVerification, trigger: 'blur' }],
 })
 const changeRegist = () => {
     router.replace('/regist')
 }
-// let imgUrl = ref("http://localhost:8080/api/login/verifyCode?time=" + new Date());
-// const resetImg = () => {
-//     imgUrl.value = "http://localhost:8080/api/login/verifyCode?time=" + new Date();
-// }
 
 const onSubmit = (formEl: FormInstance | undefined) => {
-    var model={
-            UserName:'tang.zx',
-            Password:'qwe123'
-        }
-        login(model).then((res)=>{
-            debugger
-            console.log(res)
-        })
+    debugger
     if (!formEl) return
     formEl.validate((valid) => {
-        var model={
-            UserName:'tang.zx',
-            Password:'qwe123'
+        if (valid) {
+            login(user).then((res: any) => {
+                console.log(user)
+                if (res.status == 200) {
+                    window.localStorage.token = res.data.token
+                    window.localStorage.expires = res.data.expiresTime
+                    ElMessage({
+                        message: '登录成功',
+                        type: 'success'
+                    })
+                } else {
+                    
+                }
+            }).catch(error => {
+                console.log(error)
+                ElMessage.error(error.message)
+            })
         }
-        login(model).then((res)=>{
-            debugger
-            console.log(res)
-        })
-        // if (valid) {
-        //     Object.keys(user).forEach((key) => {
-        //         if (key == 'account' || key == 'password') {
-        //             users[key] = encode(user[key])
-        //         } else {
-        //             users[key] = user[key]
-        //         }
-        //     })
-        //     login(users).then((res) => {
-        //         if (res.data.code == 90000) {
-        //             ElMessage({
-        //                 message: '登录成功',
-        //                 type: 'success'
-        //             })
-        //             // 把信息存储到全局变量中
-        //             tokenStore().setToken(res.data.data.token)
-        //             accountStore().setAccount(res.data.data.account)
-        //             // 2. 跳转到  elem 后台！！！
-        //             router.push('/homePage')
-        //             // window.location.href="../../../public/backgroudhtml/backgroud.html"
-        //         } else {
-        //             ElMessage.error("账号或验证码错误！")
-        //         }
-        //     }).catch(error => {
-        //         ElMessage.error("账号或验证码错误！")
-        //     })
-        // } else {
-        //     ElMessage.error("错误的提交！")
-        //     return false
-        // }
+
+
     })
 }
 const options = {

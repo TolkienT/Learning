@@ -1,6 +1,9 @@
 ﻿using Autofac.Core;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Xml.Linq;
 using WebApi.IService.Base;
 using WebApi.IService.Sys;
 using WebApi.IService.User;
@@ -62,21 +65,54 @@ namespace WebApi.Core.Controllers.Sys
 
         [HttpPost]
         [Route("Login")]
-        public async Task<HttpResultModel<string>> Login([FromBody] LoginDto dto)
+        public async Task<HttpResultModel<object>> Login([FromBody] LoginDto dto)
         {
             var user = await _userService.GetUser(x => x.UserName == dto.UserName);
-            if(user is null)
-                return new HttpResultModel<string>("用户不存在", null, HttpResultStatus.Error);
+            if (user is null)
+                return new HttpResultModel<object>("用户不存在", null, HttpResultStatus.Error);
             var security = await _userSecurityService.GetSecurity(x => x.UserId == user.Id);
             if (security is not null)
             {
                 if (security.Password != dto.Password)
                 {
-                    return new HttpResultModel<string>("密码错误", null,HttpResultStatus.Error);
+                    return new HttpResultModel<object>("密码错误", null, HttpResultStatus.Error);
                 }
             }
 
-            return new HttpResultModel<string>("Success", null);
+            int expiresTime = 3600;
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.GivenName, user.NickName),
+                new Claim(ClaimTypes.Expiration, expiresTime.ToString())
+            };
+
+            var now = DateTime.Now;
+
+            /*
+             * iss (issuer)：签发人
+             * exp (expiration time)：过期时间
+             * sub (subject)：主题
+             * aud (audience)：受众
+             * nbf (Not Before)：生效时间
+             * iat (Issued At)：签发时间
+             * jti (JWT ID)：编号
+             */
+            var jwt = new JwtSecurityToken(
+                issuer: "tang.zx",
+                audience: "audience",
+                claims: claims,
+                notBefore: now,
+                expires: now.AddSeconds(expiresTime)
+                );
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return new HttpResultModel<object>("Success", new
+            {
+                Token= token,
+                ExpiresTime= expiresTime
+            });
         }
     }
 }
