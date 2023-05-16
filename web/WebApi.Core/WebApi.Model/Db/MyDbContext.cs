@@ -38,6 +38,10 @@ namespace WebApi.Model.Db
                 }
 
             }
+            else
+            {
+                Console.WriteLine("未配置数据库连接");
+            }
 
         }
 

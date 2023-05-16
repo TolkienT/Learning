@@ -8,6 +8,9 @@ using WebApi.Extensions.ServiceExtensions;
 using WebApi.Model.AutoMapper;
 using WebApi.Model.Db;
 using WebApi.Common.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using WebApi.Repository.Mongo;
+using WebApi.IRepository.Mongo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +55,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddTransient<IMapper, Mapper>();
 #endregion
+
+//builder.Services.AddScoped<IDatabaseContext, MongoDbContext>();
+builder.Services.AddScoped<MongoDbContext>();
+//Mongo Repository
+builder.Services.AddScoped(typeof(IMongoBaseRepository<>), typeof(MongoBaseRepository<>));
 
 #region CORS
 builder.Services.AddCors(options =>
