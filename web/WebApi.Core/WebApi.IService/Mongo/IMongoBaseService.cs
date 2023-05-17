@@ -9,7 +9,7 @@ namespace WebApi.IService.Mongo
 {
     public interface IMongoBaseService<TEntity> where TEntity : class
     {
-        Task<bool> Add(TEntity model);
+        Task Add(TEntity model);
 
         Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> lambda);
 

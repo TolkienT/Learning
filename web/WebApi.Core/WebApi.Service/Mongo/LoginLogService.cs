@@ -28,7 +28,7 @@ namespace WebApi.Service.Mongo
 
         public async Task<LoginLogEntity> GetAsync(Expression<Func<LoginLogEntity, bool>> lambda)
         {
-            return await _loginLogRepository.GetAsync(lambda);
+            return await _loginLogRepository.First(lambda);
         }
 
     }

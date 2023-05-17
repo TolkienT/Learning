@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using WebApi.Common.App;
 using WebApi.IRepository.Mongo;
 using WebApi.Model.Db;
 
@@ -21,15 +22,26 @@ namespace WebApi.Repository.Mongo
 
         public async Task AddAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            string className = Appsettings.GetApp(new string[] { "Mongo", "ClassName",typeof(TEntity).Name });
+            if (!string.IsNullOrWhiteSpace(className))
+            {
+                var col = _context.Db.GetCollection<TEntity>(className);
+                await col.InsertOneAsync(entity);
+            }
+
         }
 
-        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> lambda)
+        public async Task<TEntity> First(Expression<Func<TEntity, bool>> lambda)
         {
-
-            return await _context.Db.GetCollection<TEntity>("LoginLog")
+            string className= Appsettings.GetApp(new string[] { "Mongo", "ClassName", typeof(TEntity).Name });
+            if(!string.IsNullOrWhiteSpace(className))
+            {
+                return await _context.Db.GetCollection<TEntity>(className)
                 .Find(lambda)
                 .FirstOrDefaultAsync();
+            }
+            return null;
+            
         }
 
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> lambda)

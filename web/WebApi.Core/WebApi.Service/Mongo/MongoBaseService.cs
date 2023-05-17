@@ -19,9 +19,9 @@ namespace WebApi.Service.Mongo
         {
             _baseDal = baseDal;
         }
-        public Task<bool> Add(TEntity model)
+        public async Task Add(TEntity model)
         {
-            throw new NotImplementedException();
+            await _baseDal.AddAsync(model);
         }
 
         public Task<bool> Delete(TEntity model)
@@ -31,7 +31,7 @@ namespace WebApi.Service.Mongo
 
         public async Task<TEntity> First(Expression<Func<TEntity, bool>> lambda)
         {
-            return await _baseDal.GetAsync(lambda);
+            return await _baseDal.First(lambda);
         }
 
         public Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> lambda)
