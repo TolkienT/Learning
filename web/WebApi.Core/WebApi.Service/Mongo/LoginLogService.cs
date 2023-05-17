@@ -16,16 +16,14 @@ namespace WebApi.Service.Mongo
 {
     public class LoginLogService : MongoBaseService<LoginLogEntity>, ILoginLogService
     {
-        //private readonly IMongoCollection<UserEntity> _collection;
         private readonly IMongoBaseRepository<LoginLogEntity> _loginLogRepository;
 
         public LoginLogService(
-            IMongoBaseRepository<LoginLogEntity> loginLogRepository,
             IMongoBaseRepository<LoginLogEntity> baseRepository
         )
             : base(baseRepository)
         {
-            _loginLogRepository = loginLogRepository;
+            _loginLogRepository = baseRepository;
         }
 
         public async Task<LoginLogEntity> GetAsync(Expression<Func<LoginLogEntity, bool>> lambda)
