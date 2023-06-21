@@ -17,6 +17,8 @@ namespace WebApi.Model.Entities
         public string AreaName { get; set; }
         [SugarColumn(ColumnName = "area_code")]
         public string AreaCode { get; set; }
+        [SugarColumn(ColumnName = "test_double")]
+        public double? TestDouble { get; set; }
 
     }
 }

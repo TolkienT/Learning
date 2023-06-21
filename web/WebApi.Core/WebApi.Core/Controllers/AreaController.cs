@@ -20,9 +20,9 @@ namespace WebApi.Core.Controllers
 
         [HttpGet]
         [Route("AddArea")]
-        public async Task<HttpResultModel<string>> Add()
+        public async Task<HttpResultModel<string>> Add(double? test)
         {
-            if (await _areaService.Add(new AreaEntity() { AreaCode = "1", AreaName = "China" }))
+            if (await _areaService.Add(new AreaEntity() { AreaCode = "1", AreaName = "China", TestDouble = test }))
                 return new HttpResultModel<string>("success", null);
             return new HttpResultModel<string>("error", null);
         }
