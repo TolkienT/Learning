@@ -16,4 +16,8 @@
     <ProjectReference Include="..\WebApi.Common\WebApi.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
 </Project>

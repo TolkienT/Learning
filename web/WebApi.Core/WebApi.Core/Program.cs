@@ -64,14 +64,14 @@ builder.Services.AddScoped(typeof(IMongoBaseRepository<>), typeof(MongoBaseRepos
 #region CORS
 builder.Services.AddCors(options =>
 {
-    if (Appsettings.GetApp(new string[] { "Cors", "EnableAllIPs" }) == "1")
+    if (Appsettings.GetApp(new string[] { "Cors", "EnableAllIPs" }) == "0")
     {
         options.AddPolicy(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }), policy =>
         {
             policy
-                            .WithOrigins(Appsettings.GetApp(new string[] { "Cors", "IPs" }).Split(','))
-                            .AllowAnyHeader()//Ensures that the policy allows any header.
-                            .AllowAnyMethod();
+            .WithOrigins(Appsettings.GetApp(new string[] { "Cors", "IPs" }).Split(','))
+            .AllowAnyHeader()//Ensures that the policy allows any header.
+            .AllowAnyMethod();
         });
     }
     else
@@ -88,6 +88,7 @@ builder.Services.AddCors(options =>
             });
     }
 });
+//app.UseCors(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }));
 #endregion
 Console.WriteLine("Start");
 var app = builder.Build();
@@ -101,8 +102,6 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseCors(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }));
 
 app.UseAuthorization();
 

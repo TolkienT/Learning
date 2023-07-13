@@ -16,11 +16,13 @@ namespace WebApi.Model.Models
         {
 
         }
-        public HttpResultModel(string message, T data, HttpResultStatus status = HttpResultStatus.OK)
+
+        public HttpResultModel(T data, string message = "Success", HttpResultStatus status = HttpResultStatus.OK)
         {
             Status = status;
             Message = message;
             Data = data;
         }
+
     }
 }

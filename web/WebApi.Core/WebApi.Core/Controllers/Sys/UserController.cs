@@ -40,7 +40,7 @@ namespace WebApi.Core.Controllers.Sys
         {
             var users = await _userService.Query();
             var res = _mapper.Map<List<UserDto>>(users);
-            return new HttpResultModel<List<UserDto>>("Success", res);
+            return new HttpResultModel<List<UserDto>>(res);
         }
 
         [HttpPost]
@@ -49,8 +49,8 @@ namespace WebApi.Core.Controllers.Sys
         {
             var flag = await _userService.Register(dto);
             if (flag)
-                return new HttpResultModel<string>("Success", null);
-            return new HttpResultModel<string>("注册失败", null, HttpResultStatus.Error);
+                return new HttpResultModel<string>(null);
+            return new HttpResultModel<string>(null, "注册失败", HttpResultStatus.Error);
         }
 
         [HttpPost]
@@ -59,8 +59,8 @@ namespace WebApi.Core.Controllers.Sys
         {
             var flag = await _userService.UpdateUser(dto);
             if (flag)
-                return new HttpResultModel<string>("Success", null);
-            return new HttpResultModel<string>("注册失败", null, HttpResultStatus.Error);
+                return new HttpResultModel<string>(null);
+            return new HttpResultModel<string>(null, "注册失败", HttpResultStatus.Error);
         }
 
         [HttpPost]
@@ -69,13 +69,13 @@ namespace WebApi.Core.Controllers.Sys
         {
             var user = await _userService.GetUser(x => x.UserName == dto.UserName);
             if (user is null)
-                return new HttpResultModel<object>("用户不存在", null, HttpResultStatus.Error);
+                return new HttpResultModel<object>(null, "用户不存在", HttpResultStatus.Error);
             var security = await _userSecurityService.GetSecurity(x => x.UserId == user.Id);
             if (security is not null)
             {
                 if (security.Password != dto.Password)
                 {
-                    return new HttpResultModel<object>("密码错误", null, HttpResultStatus.Error);
+                    return new HttpResultModel<object>(null, "密码错误", HttpResultStatus.Error);
                 }
             }
 
@@ -108,10 +108,10 @@ namespace WebApi.Core.Controllers.Sys
                 );
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return new HttpResultModel<object>("Success", new
+            return new HttpResultModel<object>( new
             {
-                Token= token,
-                ExpiresTime= expiresTime
+                Token = token,
+                ExpiresTime = expiresTime
             });
         }
     }

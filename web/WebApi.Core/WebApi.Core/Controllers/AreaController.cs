@@ -23,15 +23,15 @@ namespace WebApi.Core.Controllers
         public async Task<HttpResultModel<string>> Add(double? test)
         {
             if (await _areaService.Add(new AreaEntity() { AreaCode = "1", AreaName = "China", TestDouble = test }))
-                return new HttpResultModel<string>("success", null);
-            return new HttpResultModel<string>("error", null);
+                return new HttpResultModel<string>(null);
+            return new HttpResultModel<string>(null, "error");
         }
 
         [HttpGet]
         public async Task<HttpResultModel<IEnumerable<AreaEntity>>> Query([FromQuery] UserQueryInput input)
         {
             var res = await _areaService.Query(x => x.AreaCode == input.AreaCode);
-            return new HttpResultModel<IEnumerable<AreaEntity>>("error", res);
+            return new HttpResultModel<IEnumerable<AreaEntity>>(res, "error");
         }
     }
 }
