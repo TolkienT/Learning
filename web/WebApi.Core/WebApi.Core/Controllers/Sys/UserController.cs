@@ -78,17 +78,16 @@ namespace WebApi.Core.Controllers.Sys
                     return new HttpResultModel<object>(null, "密码错误", HttpResultStatus.Error);
                 }
             }
-
+            var now = DateTime.Now;
             int expiresTime = 3600;
+            DateTime expirationTime = now.AddSeconds(expiresTime);
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(ClaimTypes.GivenName, user.NickName),
-                new Claim(ClaimTypes.Expiration, expiresTime.ToString())
+                new Claim(ClaimTypes.Expiration, expirationTime.ToString("yyyy-MM-dd HH:mm:ss"))
             };
-
-            var now = DateTime.Now;
 
             /*
              * iss (issuer)：签发人
@@ -104,11 +103,11 @@ namespace WebApi.Core.Controllers.Sys
                 audience: "audience",
                 claims: claims,
                 notBefore: now,
-                expires: now.AddSeconds(expiresTime)
+                expires: expirationTime
                 );
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return new HttpResultModel<object>( new
+            return new HttpResultModel<object>(new
             {
                 Token = token,
                 ExpiresTime = expiresTime
