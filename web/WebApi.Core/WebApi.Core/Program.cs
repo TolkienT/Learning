@@ -15,6 +15,8 @@ using Autofac.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Aspose.Cells.Charts;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +82,10 @@ builder.Services.AddTransient<IMapper, Mapper>();
 builder.Services.AddScoped<MongoDbContext>();
 //Mongo Repository
 builder.Services.AddScoped(typeof(IMongoBaseRepository<>), typeof(MongoBaseRepository<>));
+
+//Aspose输出excel时需要带上
+//builder.Services.Configure<KestrelServerOptions>(x => { x.AllowSynchronousIO = true; })
+//        .Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 
 #region CORS
 builder.Services.AddCors(options =>
