@@ -1,9 +1,12 @@
 ﻿using Autofac.Core;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Xml.Linq;
+using WebApi.Common.Helpers;
+using WebApi.Core.Filter;
 using WebApi.IService.Base;
 using WebApi.IService.Sys;
 using WebApi.IService.User;
@@ -17,6 +20,7 @@ namespace WebApi.Core.Controllers.Sys
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private static IMapper _mapper;
@@ -36,11 +40,13 @@ namespace WebApi.Core.Controllers.Sys
 
         [HttpGet]
         [Route("Query")]
+        [AuthonizationFilter]
+
         public async Task<HttpResultModel<List<UserDto>>> Query([FromQuery] UserQueryInput input)
         {
             var users = await _userService.Query();
             var res = _mapper.Map<List<UserDto>>(users);
-            return new HttpResultModel<List<UserDto>>("Success", res);
+            return new HttpResultModel<List<UserDto>>(res);
         }
 
         [HttpPost]
@@ -49,8 +55,8 @@ namespace WebApi.Core.Controllers.Sys
         {
             var flag = await _userService.Register(dto);
             if (flag)
-                return new HttpResultModel<string>("Success", null);
-            return new HttpResultModel<string>("注册失败", null, HttpResultStatus.Error);
+                return new HttpResultModel<string>(null);
+            return new HttpResultModel<string>(null, "注册失败", HttpResultStatus.Error);
         }
 
         [HttpPost]
@@ -59,60 +65,30 @@ namespace WebApi.Core.Controllers.Sys
         {
             var flag = await _userService.UpdateUser(dto);
             if (flag)
-                return new HttpResultModel<string>("Success", null);
-            return new HttpResultModel<string>("注册失败", null, HttpResultStatus.Error);
+                return new HttpResultModel<string>(null);
+            return new HttpResultModel<string>(null, "注册失败", HttpResultStatus.Error);
         }
 
         [HttpPost]
         [Route("Login")]
-        public async Task<HttpResultModel<object>> Login([FromBody] LoginDto dto)
+        [AllowAnonymous]
+        public async Task<HttpResultModel<string>> Login([FromBody] LoginDto dto)
         {
             var user = await _userService.GetUser(x => x.UserName == dto.UserName);
             if (user is null)
-                return new HttpResultModel<object>("用户不存在", null, HttpResultStatus.Error);
+                return new HttpResultModel<string>(null, "用户不存在", HttpResultStatus.Error);
             var security = await _userSecurityService.GetSecurity(x => x.UserId == user.Id);
             if (security is not null)
             {
                 if (security.Password != dto.Password)
                 {
-                    return new HttpResultModel<object>("密码错误", null, HttpResultStatus.Error);
+                    return new HttpResultModel<string>(null, "密码错误", HttpResultStatus.Error);
                 }
             }
 
-            int expiresTime = 3600;
+            var token = JwtHelper.GetToken(user.UserName, user.NickName);
 
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.GivenName, user.NickName),
-                new Claim(ClaimTypes.Expiration, expiresTime.ToString())
-            };
-
-            var now = DateTime.Now;
-
-            /*
-             * iss (issuer)：签发人
-             * exp (expiration time)：过期时间
-             * sub (subject)：主题
-             * aud (audience)：受众
-             * nbf (Not Before)：生效时间
-             * iat (Issued At)：签发时间
-             * jti (JWT ID)：编号
-             */
-            var jwt = new JwtSecurityToken(
-                issuer: "tang.zx",
-                audience: "audience",
-                claims: claims,
-                notBefore: now,
-                expires: now.AddSeconds(expiresTime)
-                );
-            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            return new HttpResultModel<object>("Success", new
-            {
-                Token= token,
-                ExpiresTime= expiresTime
-            });
+            return new HttpResultModel<string>(token);
         }
     }
 }

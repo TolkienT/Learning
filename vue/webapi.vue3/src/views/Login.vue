@@ -91,7 +91,7 @@ const changeRegist = () => {
 const onSubmit = (formEl: FormInstance | undefined) => {
     debugger
     if (!formEl) return
-    formEl.validate((valid) => {
+    formEl.validate((valid: boolean) => {
         if (valid) {
             login(user).then((res: any) => {
                 console.log(user)
@@ -103,7 +103,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                         type: 'success'
                     })
                 } else {
-                    
+
                 }
             }).catch(error => {
                 console.log(error)

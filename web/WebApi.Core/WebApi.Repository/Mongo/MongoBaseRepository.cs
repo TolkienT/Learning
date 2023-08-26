@@ -22,7 +22,7 @@ namespace WebApi.Repository.Mongo
 
         public async Task AddAsync(TEntity entity)
         {
-            string className = Appsettings.GetApp(new string[] { "Mongo", "ClassName",typeof(TEntity).Name });
+            string className = Appsettings.GetApp(new string[] { "Mongo", "ClassName", typeof(TEntity).Name });
             if (!string.IsNullOrWhiteSpace(className))
             {
                 var col = _context.Db.GetCollection<TEntity>(className);
@@ -33,27 +33,29 @@ namespace WebApi.Repository.Mongo
 
         public async Task<TEntity> First(Expression<Func<TEntity, bool>> lambda)
         {
-            string className= Appsettings.GetApp(new string[] { "Mongo", "ClassName", typeof(TEntity).Name });
-            if(!string.IsNullOrWhiteSpace(className))
+            string className = Appsettings.GetApp(new string[] { "Mongo", "ClassName", typeof(TEntity).Name });
+            if (!string.IsNullOrWhiteSpace(className))
             {
                 return await _context.Db.GetCollection<TEntity>(className)
                 .Find(lambda)
                 .FirstOrDefaultAsync();
             }
             return null;
-            
+
         }
 
         public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> lambda)
         {
-            return await _context.Db.GetCollection<TEntity>("LoginLog")
+            return await _context.Db.GetCollection<TEntity>("login_log")
                  .Find(lambda)
                  .ToListAsync();
         }
 
         public async Task<List<TEntity>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Db.GetCollection<TEntity>("login_log")
+                .Find(x => 1 == 1)
+                .ToListAsync();
         }
 
 
