@@ -135,4 +135,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.RegisterJob();
+
 app.Run();
