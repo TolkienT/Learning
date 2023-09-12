@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Aspose.Cells.Charts;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using WebApi.Jobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -136,5 +137,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.RegisterJob();
+
+//Task.Run(() =>
+//{
+//    _ = TestKafka.InitConsume();
+//});
 
 app.Run();

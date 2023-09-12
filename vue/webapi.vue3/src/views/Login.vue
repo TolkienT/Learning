@@ -15,11 +15,11 @@
                     <el-input class="input" v-model="user.userName" placeholder="请输入账号" maxlength="20" clearable />
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input type="password" v-model="user.password" placeholder="请输入密码" maxlength="20" show-password
+                    <el-input class="input" type="password" v-model="user.password" placeholder="请输入密码" maxlength="20" show-password
                         clearable />
                 </el-form-item>
                 <el-form-item prop="verifyCode">
-                    <el-input placeholder="请输入验证码" v-model="user.verifyCode" maxlength="4" clearable />
+                    <el-input class="input" placeholder="请输入验证码" v-model="user.verifyCode" maxlength="4" clearable />
                     <img class="verifyCodeImg">
                 </el-form-item>
                 <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
