@@ -89,7 +89,7 @@ const changeRegist = () => {
 }
 
 const onSubmit = (formEl: FormInstance | undefined) => {
-    debugger
+    var _this:any = this;
     if (!formEl) return
     formEl.validate((valid: boolean) => {
         if (valid) {
@@ -102,6 +102,7 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                         message: '登录成功',
                         type: 'success'
                     })
+                    router.replace('/home')
                 } else {
 
                 }

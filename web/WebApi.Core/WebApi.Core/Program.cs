@@ -53,7 +53,8 @@ builder.Services.AddSingleton(new Appsettings(builder.Configuration));
 
 //添加jwt验证：
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
+    .AddJwtBearer(options =>
+    {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,//是否验证Issuer
@@ -108,18 +109,16 @@ builder.Services.AddCors(options =>
             policy =>
             {
                 policy
-                .SetIsOriginAllowed((host) => true)
+                .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
+                .AllowAnyHeader();
             });
     }
 });
 
-//app.UseCors(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }));
 #endregion
 var app = builder.Build();
-
+app.UseCors(Appsettings.GetApp(new string[] { "Cors", "PolicyName" }));
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{

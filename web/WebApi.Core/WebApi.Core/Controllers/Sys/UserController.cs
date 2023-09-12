@@ -66,7 +66,7 @@ namespace WebApi.Core.Controllers.Sys
             var flag = await _userService.UpdateUser(dto);
             if (flag)
                 return new HttpResultModel<string>(null);
-            return new HttpResultModel<string>(null, "注册失败", HttpResultStatus.Error);
+            return new HttpResultModel<string>(null, "更新失败", HttpResultStatus.Error);
         }
 
         [HttpPost]
