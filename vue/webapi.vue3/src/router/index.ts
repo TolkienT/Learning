@@ -1,27 +1,49 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Layout from "../views/Layout.vue"
+import About from "../views/AboutView.vue"
+import SysParam from "../views/Settings/SysParam.vue"
+
+// export const Layout = () => import("@/layout/index.vue");
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      showNavBar: true
+    }
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/login',
+    name: 'login',
+    meta: {
+      title: '登录',
+      showNavBar: false
+    },
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/',
-    name: 'login',
+    component: Layout,
     meta: {
-      title: '登录'
+      showNavBar: true
     },
-    component: () => import('../views/Login.vue')
+    children: [
+      {
+        path: '/about',
+        name: 'about',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+        meta: {
+          keepAlive: true
+        }
+      }, {
+        path: '/sysParam',
+        component: SysParam
+      }
+    ]
+
   }
 ]
 
@@ -32,7 +54,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-  var title: string = '默认名称';
+  var title: string = 'XXXX';
   /* 路由发生变化修改页面title */
   if (typeof (to.meta?.title) === 'string') {
     title = to.meta.title;
