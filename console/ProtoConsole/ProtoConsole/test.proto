@@ -1,0 +1,12 @@
+﻿syntax="proto3";
+
+option cc_enable_arenas = true;
+
+
+package Test;
+
+message TestContact {
+	int32 ID = 1;
+	string Address = 2;
+	string Name = 3;
+}

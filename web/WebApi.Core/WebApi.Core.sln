@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.Extensions", "WebApi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.Core.Filter", "WebApi.Core.Filter\WebApi.Core.Filter.csproj", "{DD33EBB6-ABA0-4471-8C26-08AC6D018696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Jobs", "WebApi.Jobs\WebApi.Jobs.csproj", "{D2EE7921-1597-41ED-AE76-8501736BE21E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi.Jobs", "WebApi.Jobs\WebApi.Jobs.csproj", "{D2EE7921-1597-41ED-AE76-8501736BE21E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Grpc", "WebApi.Grpc\WebApi.Grpc.csproj", "{2E52DEF6-281C-4A06-B6A8-4250EC3792D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{D2EE7921-1597-41ED-AE76-8501736BE21E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2EE7921-1597-41ED-AE76-8501736BE21E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2EE7921-1597-41ED-AE76-8501736BE21E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E52DEF6-281C-4A06-B6A8-4250EC3792D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E52DEF6-281C-4A06-B6A8-4250EC3792D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E52DEF6-281C-4A06-B6A8-4250EC3792D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E52DEF6-281C-4A06-B6A8-4250EC3792D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

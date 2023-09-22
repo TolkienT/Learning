@@ -18,6 +18,7 @@ using System.Text;
 using Aspose.Cells.Charts;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using WebApi.Jobs;
+using GrpcDemo.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,9 +71,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddGrpc();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 
 #region automapper
@@ -136,6 +140,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.RegisterJob();
+
+app.MapGrpcService<OrderService>();
 
 //Task.Run(() =>
 //{

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcDemo.Service";
+
+package order;
+
+service Order {
+  // create order
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderReply);
+
+  rpc QueryOrder (QueryOrderRequest) returns (QueryOrderReply);
+}
+
+//创建订单请求参数
+message CreateOrderRequest{
+	string orderNo=1;
+	string orderName=2;
+	double price=3;
+}
+//创建订单返回结果
+message CreateOrderReply{
+	bool result=1;
+	string message=2;
+}
+
+//查询订单请求
+message QueryOrderRequest{
+	uint32 id=1;
+}
+
+//查询订单范围结果
+message QueryOrderReply{
+	uint32 id=1;
+	string orderNo=2;
+	string orderName=3;
+	double price=4;
+}
+
