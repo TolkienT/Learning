@@ -19,6 +19,7 @@ using Aspose.Cells.Charts;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using WebApi.Jobs;
 using GrpcDemo.Service.Services;
+using WebApi.SignalRService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,7 +78,7 @@ builder.Services.AddGrpc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+builder.Services.AddSignalR();
 
 #region automapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -147,5 +148,7 @@ app.MapGrpcService<OrderService>();
 //{
 //    _ = TestKafka.InitConsume();
 //});
+
+app.MapHub<ChatHub>("/Chat");
 
 app.Run();

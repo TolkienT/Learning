@@ -16,6 +16,7 @@
     <ProjectReference Include="..\WebApi.Extensions\WebApi.Extensions.csproj" />
     <ProjectReference Include="..\WebApi.Grpc\WebApi.Grpc.csproj" />
     <ProjectReference Include="..\WebApi.IService\WebApi.IService.csproj" />
+    <ProjectReference Include="..\WebApi.SignalRService\WebApi.SignalRService.csproj" />
   </ItemGroup>
 
 </Project>

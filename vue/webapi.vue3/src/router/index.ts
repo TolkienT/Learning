@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import Layout from "../views/Layout.vue"
 import About from "../views/AboutView.vue"
 import SysParam from "../views/Settings/SysParam.vue"
+// import TestEdit from "../views/Test/TestEdit.vue"
+// import TestSignalR from "../views/Test/TestSignalR.vue"
+import TestTs from '../views/Test/TestTs.vue'
 
 // export const Layout = () => import("@/layout/index.vue");
 
@@ -41,9 +44,22 @@ const routes: Array<RouteRecordRaw> = [
       }, {
         path: '/sysParam',
         component: SysParam
-      }
+      },
+      // {
+      //   path: '/signalr',
+      //   component: TestSignalR
+      // }
+      // {
+      //   path: '/edit',
+      //   component: TestEdit
+      // },
+
     ]
 
+  },
+  {
+    path: '/testTs',
+    component: TestTs
   }
 ]
 
