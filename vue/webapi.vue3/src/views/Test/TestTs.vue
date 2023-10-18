@@ -16,7 +16,9 @@ var obj=new Site();
 obj.name()
 
 
-
+export default{
+    
+}
 
 
 </script>

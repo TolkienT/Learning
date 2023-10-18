@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/login',
+    path: '/',
     name: 'login',
     meta: {
       title: '登录',
@@ -28,21 +28,21 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/',
+    path: '/page',
     component: Layout,
     meta: {
       showNavBar: true
     },
     children: [
       {
-        path: '/about',
+        path: '/page/about',
         name: 'about',
         component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
         meta: {
           keepAlive: true
         }
       }, {
-        path: '/sysParam',
+        path: '/page/sysParam',
         component: SysParam
       },
       // {
@@ -58,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
 
   },
   {
-    path: '/testTs',
+    path: '/page/testTs',
     component: TestTs
   }
 ]

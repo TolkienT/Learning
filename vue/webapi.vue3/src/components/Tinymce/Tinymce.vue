@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <Editor :id="tinymceId" :init="init" :disabled="disabled" v-model="myValue"></Editor>
     </div>
@@ -97,4 +97,4 @@ export default {
 .tox.tox-silver-sink.tox-tinymce-aux {
     z-index: 2100 !important;
 }
-</style>
+</style> -->

@@ -15,18 +15,20 @@
                     <el-input class="input" v-model="user.userName" placeholder="请输入账号" maxlength="20" clearable />
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input class="input" type="password" v-model="user.password" placeholder="请输入密码" maxlength="20" show-password
-                        clearable />
+                    <el-input class="input" type="password" v-model="user.password" placeholder="请输入密码" maxlength="20"
+                        show-password clearable />
                 </el-form-item>
-                <el-form-item prop="verifyCode">
+                <!-- <el-form-item prop="verifyCode">
                     <el-input class="input" placeholder="请输入验证码" v-model="user.verifyCode" maxlength="4" clearable />
                     <img class="verifyCodeImg">
-                </el-form-item>
-                <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
+                </el-form-item> -->
+                <!-- <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button> -->
+                <el-button class="btn" type="primary" @click="onShow">登录</el-button>
                 <div style="text-align: right;transform:translate(0,30px);">
                     <el-link class="link" type="warning" @click="changeRegist">没有账号？去注册</el-link>
                 </div>
             </el-form>
+            <Vcode :show="isShow" @success="onSuccess" @close="onClose" />
         </div>
     </div>
 </template>
@@ -39,6 +41,7 @@ import type { Engine } from 'tsparticles-engine'
 import { login } from '@/api/security/user';
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from "element-plus";
+import Vcode from "vue3-puzzle-vcode";
 
 const particlesInit = async (engine: Engine) => {
     await loadFull(engine)
@@ -71,25 +74,25 @@ const validateAccount = (rule: any, value: any, callback: any) => {
         callback()
     }
 }
-const validateVerification = (rule: any, value: any, callback: any) => {
-    if (value === '' || value === null) {
-        callback(new Error('请输入验证码'))
-    } else {
-        callback()
-    }
-}
+// const validateVerification = (rule: any, value: any, callback: any) => {
+//     if (value === '' || value === null) {
+//         callback(new Error('请输入验证码'))
+//     } else {
+//         callback()
+//     }
+// }
 //校验
 const rules = reactive({
     password: [{ validator: validatePassword, trigger: 'blur' }],
     userName: [{ validator: validateAccount, trigger: 'blur' }],
-    verifyCode: [{ validator: validateVerification, trigger: 'blur' }],
+    // verifyCode: [{ validator: validateVerification, trigger: 'blur' }],
 })
 const changeRegist = () => {
     router.replace('/regist')
 }
 
 const onSubmit = (formEl: FormInstance | undefined) => {
-    var _this:any = this;
+    var _this: any = this;
     if (!formEl) return
     formEl.validate((valid: boolean) => {
         if (valid) {
@@ -195,6 +198,23 @@ const options = {
     },
     detectRetina: true
 }
+
+const isShow = ref(false);
+
+const onShow = () => {
+    isShow.value = true;
+};
+
+const onClose = () => {
+    isShow.value = false;
+};
+
+const onSuccess = () => {
+    onSubmit(ruleFormRef.value);
+
+    onClose(); // 验证成功，手动关闭模态框
+};
+
 </script>
 
 <style scoped>

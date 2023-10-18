@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <TinymceEditor :value="content" @input="newContent"></TinymceEditor>
     </div>
@@ -22,4 +22,4 @@ export default {
         }
     }
 }
-</script>
+</script> -->
