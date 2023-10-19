@@ -18,8 +18,8 @@ using System.Text;
 using Aspose.Cells.Charts;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using WebApi.Jobs;
-using GrpcDemo.Service.Services;
 using WebApi.SignalRService;
+using WebApi.Grpc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +72,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddGrpc();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -142,13 +141,21 @@ app.MapControllers();
 
 app.RegisterJob();
 
-app.MapGrpcService<OrderService>();
-
 //Task.Run(() =>
 //{
 //    _ = TestKafka.InitConsume();
 //});
 
-app.MapHub<ChatHub>("/Chat");
+try
+{
+    GrpcServerTest.StartGrpcService();
+
+    //GrpcClientTest.StartGrpcClient();
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.ToString());
+}
+
 
 app.Run();

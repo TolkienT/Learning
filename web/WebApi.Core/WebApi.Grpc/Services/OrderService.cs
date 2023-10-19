@@ -1,17 +1,15 @@
 ﻿using Grpc.Core;
 using GrpcDemo.Service;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace GrpcDemo.Service.Services
+namespace WebApi.Grpc.Services
 {
     public class OrderService : Order.OrderBase
     {
-        private readonly ILogger<OrderService> _logger;
-        public OrderService(ILogger<OrderService> logger)
-        {
-            _logger = logger;
-        }
-
         public override Task<CreateOrderReply> CreateOrder(CreateOrderRequest request, ServerCallContext context)
         {
             return Task.FromResult(new CreateOrderReply

@@ -35,16 +35,23 @@ namespace GrpcDemo.Client
             //使用http
             AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             string url = "http://localhost:5048";
-
-            using (var channel = GrpcChannel.ForAddress(url))
+            try
             {
-                var client = new Order.OrderClient(channel);
-                var reply = client.QueryOrder(new QueryOrderRequest()
+                using (var channel = GrpcChannel.ForAddress(url))
                 {
-                    Id = 1
-                });
+                    var client = new Order.OrderClient(channel);
+                    var reply = client.QueryOrder(new QueryOrderRequest()
+                    {
+                        Id = 1
+                    });
 
-                Console.WriteLine($"{reply}");
+                    Console.WriteLine($"{reply}");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
 
         }
