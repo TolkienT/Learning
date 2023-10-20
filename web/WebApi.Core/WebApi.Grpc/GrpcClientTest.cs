@@ -20,12 +20,6 @@ namespace WebApi.Grpc
             string url = "http://localhost:5048";
             try
             {
-                var options = new List<ChannelOption>
-                {
-                    new ChannelOption(ChannelOptions.MaxSendMessageLength, 100 * 1024 * 1024),
-                    new ChannelOption(ChannelOptions.MaxReceiveMessageLength, 100 * 1024 * 1024)
-                };
-
                 channel = GrpcChannel.ForAddress(url);
                 client = new Order.OrderClient(channel);
 
