@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApi.IService.Base;
 using WebApi.Model.Dtos.Sys;
-using WebApi.Model.Entities;
 using WebApi.Model.Entities.Sys;
 
 namespace WebApi.IService.Sys

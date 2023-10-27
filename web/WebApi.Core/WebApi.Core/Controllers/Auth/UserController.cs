@@ -16,7 +16,7 @@ using WebApi.Model.Entities.Sys;
 using WebApi.Model.Enums;
 using WebApi.Model.Models;
 
-namespace WebApi.Core.Controllers.Sys
+namespace WebApi.Core.Controllers.Auth
 {
     [ApiController]
     [Route("api/[controller]")]
