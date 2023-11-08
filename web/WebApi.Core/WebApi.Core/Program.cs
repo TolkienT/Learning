@@ -18,8 +18,8 @@ using System.Text;
 using Aspose.Cells.Charts;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using WebApi.Jobs;
-using WebApi.SignalRService;
 using WebApi.Grpc;
+using WebApi.Common.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -140,6 +140,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.RegisterJob();
+
+app.MapHub<MessageHub>("messageHub");
 
 //Task.Run(() =>
 //{

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.SS.Formula.Functions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,13 @@ namespace WebApi.Model.Models
             Message = message;
             Data = data;
         }
+    }
 
+    public class HttpResultModel
+    {
+        public HttpResultStatus Status { get; set; } = HttpResultStatus.OK;
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public object Data { get; set; }
     }
 }
