@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory,createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 export const Layout = () => import("@/layout/index.vue");
 
 // 静态路由
@@ -105,15 +105,11 @@ export const Layout = () => import("@/layout/index.vue");
 
 
 
-
-
-
-
 import HomeView from '../views/HomeView.vue'
 import About from "../views/AboutView.vue"
 import SysParam from "../views/Settings/SysParam.vue"
 // import TestEdit from "../views/Test/TestEdit.vue"
-// import TestSignalR from "../views/Test/TestSignalR.vue"
+import TestSignalR from "../views/Test/TestSignalR.vue"
 import TestTs from '../views/Test/TestTs.vue'
 const routes: Array<RouteRecordRaw> = [
     {
@@ -151,14 +147,15 @@ const routes: Array<RouteRecordRaw> = [
                     affix: true,
                     keepAlive: true,
                 },
-            }, {
+            },
+            {
                 path: '/dashboard/sysParam',
                 component: SysParam
             },
-            // {
-            //   path: '/signalr',
-            //   component: TestSignalR
-            // }
+            {
+                path: '/dashboard/signalr',
+                component: TestSignalR
+            }
             // {
             //   path: '/edit',
             //   component: TestEdit
@@ -175,7 +172,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes: routes
 })
 
 router.beforeEach((to, from, next) => {

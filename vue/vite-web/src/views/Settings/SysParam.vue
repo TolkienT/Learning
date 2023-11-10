@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
+</script>
 <template>
     <section>
         <!--工具条-->

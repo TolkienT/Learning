@@ -141,7 +141,7 @@ app.MapControllers();
 
 app.RegisterJob();
 
-app.MapHub<MessageHub>("messageHub");
+app.MapHub<MessageHub>("/signalr/messageHub");
 
 //Task.Run(() =>
 //{
