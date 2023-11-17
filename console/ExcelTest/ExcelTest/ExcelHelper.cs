@@ -66,5 +66,73 @@ namespace ExcelTest
             }
         }
 
+        public static void TableToExcelTwo(List<StudentModel> list, string file)
+        {
+            IWorkbook workbook = new XSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("sheet");
+            IRow rows = null;
+
+            IRow Title = sheet.CreateRow(0);
+            Title.CreateCell(0).SetCellValue("序号");
+            Title.CreateCell(1).SetCellValue("姓名");
+            Title.CreateCell(2).SetCellValue("班级");
+            Title.CreateCell(3).SetCellValue("备注");
+
+
+            Title.CreateCell(4).SetCellValue("语文成绩");
+            Title.CreateCell(5).SetCellValue("语文联考排名");
+            Title.CreateCell(6).SetCellValue("语文校次");
+
+            Title.CreateCell(7).SetCellValue("数学成绩");
+            Title.CreateCell(8).SetCellValue("数学联考排名");
+            Title.CreateCell(9).SetCellValue("数学校次");
+
+            Title.CreateCell(10).SetCellValue("英语成绩");
+            Title.CreateCell(11).SetCellValue("英语联考排名");
+            Title.CreateCell(12).SetCellValue("英语校次");
+
+            Title.CreateCell(13).SetCellValue("总分成绩");
+            Title.CreateCell(14).SetCellValue("总分联考排名");
+            Title.CreateCell(15).SetCellValue("总分校次");
+
+            for (int i = 1; i <= list.Count; i++)
+            {
+                rows = sheet.CreateRow(i);
+                var entity = list[i - 1];
+                rows.CreateCell(0).SetCellValue(entity.Order);
+                rows.CreateCell(1).SetCellValue(entity.Name);
+                rows.CreateCell(2).SetCellValue(entity.Class);
+                rows.CreateCell(3).SetCellValue(entity.Remark);
+
+
+                rows.CreateCell(4).SetCellValue(entity.ChineseGrade);
+                rows.CreateCell(5).SetCellValue(entity.ChineseOrder);
+                rows.CreateCell(6).SetCellValue(entity.ChineseOrderInSchool);
+
+                rows.CreateCell(7).SetCellValue(entity.MathGrade);
+                rows.CreateCell(8).SetCellValue(entity.MathOrder);
+                rows.CreateCell(9).SetCellValue(entity.MathOrderInSchool);
+
+                rows.CreateCell(10).SetCellValue(entity.EnglishGrade);
+                rows.CreateCell(11).SetCellValue(entity.EnglishOrder);
+                rows.CreateCell(12).SetCellValue(entity.EnglishOrderInSchool);
+
+                rows.CreateCell(13).SetCellValue(entity.TotalGrade);
+                rows.CreateCell(14).SetCellValue(entity.TotalOrder);
+                rows.CreateCell(15).SetCellValue(entity.TotalOrderInSchool);
+            }
+
+            //转为字节数组  
+            MemoryStream stream = new MemoryStream();
+            workbook.Write(stream);
+            var buf = stream.ToArray();
+            //保存为Excel文件  
+            using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                fs.Write(buf, 0, buf.Length);
+                fs.Flush();
+            }
+        }
+
     }
 }
