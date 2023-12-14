@@ -2,8 +2,14 @@
 using Confluent.Kafka;
 using KafkaConsumerDemo;
 
-await ConsumeMethodDemo.InitCosume();
+_ = Task.Run(async () =>
+{
+    await ConsumeMethodDemo.InitCosume();
+});
 
-
+//_ = Task.Run(async () =>
+//{
+//    await TestConsume.InitCosume();
+//});
 
 Console.ReadKey();

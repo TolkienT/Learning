@@ -1,23 +1,22 @@
 ﻿using Confluent.Kafka;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace KafkaConsumerDemo
 {
-    public class ConsumeMethodDemo
+    public class TestConsume
     {
+
         public static async Task InitCosume()
         {
             var conf = new ConsumerConfig
             {
                 //BootstrapServers = "124.220.210.116:9092",
                 BootstrapServers = "124.70.193.28:9094",
-                GroupId = "test-consumer-group",
+                GroupId = "test-consumer-group1",
                 ClientId = "consumer-test",
                 //SecurityProtocol = SecurityProtocol.SaslPlaintext,
                 //SaslMechanism = SaslMechanism.Plain,
@@ -49,7 +48,7 @@ namespace KafkaConsumerDemo
             })
             .Build())
             {
-                c.Subscribe("yutong-trxk-mine-vehicle");
+                c.Subscribe("qwe123");
 
                 try
                 {
@@ -61,19 +60,19 @@ namespace KafkaConsumerDemo
 
                             if (cr != null)
                             {
-                                Console.WriteLine("收到数据:" + cr.Message.Value);
+                                Console.WriteLine("qwe123收到数据:" + cr.Message.Value);
 
                             }
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("获取数据失败1：" + ex.ToString());
+                            Console.WriteLine("qwe123获取数据失败1：" + ex.ToString());
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("获取数据失败2：" + ex.ToString());
+                    Console.WriteLine("qwe123获取数据失败2：" + ex.ToString());
 
                     c.Close();
                 }
