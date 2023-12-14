@@ -1,9 +1,35 @@
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using AutoMapper;
 using StackExchange.Redis;
 using WebServer.Common.Helpers;
+using WebServer.Extensions.ServiceExtensions;
 using WebServer.IService.Redis;
+using WebServer.Model.AutoMapper;
 using WebServer.Service.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
+//这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
+    {
+        builder.RegisterModule(new AutofacModuleRegister());
+    })
+    .ConfigureLogging(builder =>
+    {
+        // 1.过滤掉系统默认的一些日志
+        builder.AddFilter("System", LogLevel.Error);
+        builder.AddFilter("Microsoft", LogLevel.Error);
+
+        // 2.也可以在appsettings.json中配置，LogLevel节点
+
+        // 3.统一设置
+        builder.SetMinimumLevel(LogLevel.Error);
+
+        //// 默认log4net.confg
+        //builder.AddLog4Net(Path.Combine(Directory.GetCurrentDirectory(), "log4net.config"));
+    });
+
 
 builder.Services.AddSingleton(new AppSettingHelper(builder.Configuration));
 
@@ -14,6 +40,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+#region automapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddTransient<IMapper, Mapper>();
+#endregion
 
 //string myRedisConStr = AppSettingHelper.GetApp(new string[] { "Redis", "MyRedisConStr" });
 //if (string.IsNullOrWhiteSpace(myRedisConStr))

@@ -9,6 +9,17 @@ namespace WebServer.Model.Models
 {
     public class HttpResultModel
     {
+        public HttpResultModel()
+        {
+
+        }
+        public HttpResultModel(object data)
+        {
+            Success = true;
+            Status = HttpResultStatus.OK;
+            Data = data;
+        }
+
         public HttpResultStatus Status { get; set; } = HttpResultStatus.OK;
         public bool Success { get; set; }
         public string Message { get; set; }
