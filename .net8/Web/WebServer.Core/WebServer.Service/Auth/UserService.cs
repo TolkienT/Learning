@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using WebServer.IRepository.Auth;
 using WebServer.IRepository.Base;
 using WebServer.IService.Auth;
+using WebServer.Model.Dtos.Auth;
 using WebServer.Model.Entities.Auth;
 using WebServer.Service.Base;
 
@@ -33,19 +34,13 @@ namespace WebServer.Service.Auth
             return await _baseDal.First(lambda);
         }
 
-        //public async Task<bool> Register(UserRegisterDto dto)
-        //{
-        //    var user = _mapper.Map<UserEntity>(dto);
+        public async Task<bool> Register(UserRegisterDto dto)
+        {
+            var user = _mapper.Map<UserEntity>(dto);
 
-        //    var security = new UserSecurityEntity()
-        //    {
-        //        UserId = user.Id,
-        //        Password = dto.Password
-        //    };
+            return await _userRepo.Register(user);
 
-        //    return await _userRepo.Register(user, security);
-
-        //}
+        }
 
         //public async Task<bool> UpdateUser(UpdateUserDto dto)
         //{

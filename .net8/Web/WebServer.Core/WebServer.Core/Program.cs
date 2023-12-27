@@ -7,6 +7,10 @@ using WebServer.Extensions.ServiceExtensions;
 using WebServer.IService.Redis;
 using WebServer.Model.AutoMapper;
 using WebServer.Service.Redis;
+using WebServer.IService.Mongo;
+using WebServer.Service.Mongo;
+using WebServer.IRepository.Mongo;
+using WebServer.Repository.Mongo;
 
 var builder = WebApplication.CreateBuilder(args);
 //这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
@@ -73,6 +77,8 @@ builder.Services.AddTransient<IMapper, Mapper>();
 //Console.WriteLine($"{mykeyValue}");
 
 builder.Services.AddSingleton<IRedisService, RedisServiceImpl>();
+
+builder.Services.AddSingleton<LoginLogService>();
 
 #region CORS
 builder.Services.AddCors(options =>

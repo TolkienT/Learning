@@ -43,6 +43,11 @@ namespace WebServer.Model.Entities.Auth
         /// </summary>
         [SugarColumn(ColumnName = "gender")]
         public Gender Gender { get; set; } = Gender.Unknow;
+        /// <summary>
+        /// 密码
+        /// </summary>
+        [SugarColumn(ColumnName = "password")]
+        public string Password { get; set; }
 
 
     }

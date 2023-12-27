@@ -14,6 +14,9 @@ namespace KafkaProducerDemo
         public static async Task SendMsg()
         {
             var topicName = "yutong-trxk-mine-vehicle";
+            //var topicName = "trxk-mine-yutong-task-create";
+            //var topicName = "trxk-mine-yutong-task-finish";
+
             var config = new ProducerConfig
             {
                 //BootstrapServers = "124.220.210.116:9092",
@@ -47,13 +50,17 @@ namespace KafkaProducerDemo
                         };
 
                         string str = JsonConvert.SerializeObject(model);
-                        Console.WriteLine($"发送数据:{str}");
+
+                        //string str = "{\"excavatorNum\":482,\"sideName\":\"草庙345采面\",\"sideNo\":\"10415\",\"taskName\":\"20231222草庙345-221205采面爆堆482\",\"taskNo\":\"47616\",\"taskType\":2,\"taskVolume\":33.00,\"time\":\"2023-12-22 15:30:52\",\"unloadDicId\":10021,\"unloadDicName\":\"骨料线\",\"vehicleNos\":[\"豫A00088\"]}";
+
+                        //string str = "[{\"endTime\":\"2023-12-22 15:36:23\",\"taskId\":47616,\"vehicleNo\":\"豫A00088\"}]";
+
                         //异步生产消息
                         var dr = await p.ProduceAsync(topicName, new Message<Null, string> { Value = str });
-
+                        Console.WriteLine($"发送数据:{str}");
                         //Console.WriteLine($"发送数据qwe123:{i}");
                         //var res= await p.ProduceAsync("qwe123", new Message<Null, string> { Value = $"qwe{i}" });
-                        Thread.Sleep(1000 * 10);
+                        Thread.Sleep(1000);
 
                     }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ namespace KafkaConsumerDemo
             .Build())
             {
                 c.Subscribe("yutong-trxk-mine-vehicle");
-
+                //c.Subscribe("trxk-mine-yutong-task-create");
                 try
                 {
                     while (true)

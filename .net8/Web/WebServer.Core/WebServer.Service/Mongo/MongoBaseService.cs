@@ -32,14 +32,14 @@ namespace WebServer.Service.Mongo
             return await _baseDal.First(lambda);
         }
 
-        public Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> lambda)
+        public async Task<List<TEntity>> Query(Expression<Func<TEntity, bool>> lambda)
         {
-            throw new NotImplementedException();
+            return await _baseDal.GetListAsync(lambda);
         }
 
-        public Task<List<TEntity>> QueryAll()
+        public async Task<List<TEntity>> QueryAll()
         {
-            throw new NotImplementedException();
+            return await _baseDal.GetAllAsync();
         }
     }
 }

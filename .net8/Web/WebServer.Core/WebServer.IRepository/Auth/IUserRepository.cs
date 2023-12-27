@@ -9,6 +9,6 @@ namespace WebServer.IRepository.Auth
 {
     public interface IUserRepository
     {
-        //Task<bool> Register(UserEntity user, UserSecurityEntity security);
+        Task<bool> Register(UserEntity user);
     }
 }
