@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { ElMessage } from "element-plus";
 </script>
 <template>
+    <a>SysParam</a>
     <section>
         <!--工具条-->
         <el-col>
