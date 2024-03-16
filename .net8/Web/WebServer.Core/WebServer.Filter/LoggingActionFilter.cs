@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace WebServer.Filter
 {
-    public class LoggingActionFilter : IActionFilter
+    public class LoggingActionFilter : Attribute, IActionFilter
     {
+        public int Order { get; set; }
+
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            Console.Write("OnActionExecuted");
+            Console.WriteLine("OnActionExecuted");
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            Console.Write("OnActionExecuting");
+            Console.WriteLine("OnActionExecuting");
         }
     }
 }

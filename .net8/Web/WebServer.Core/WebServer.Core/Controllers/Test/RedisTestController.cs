@@ -2,11 +2,14 @@
 using Microsoft.Extensions.Caching.Distributed;
 using WebServer.IService.Redis;
 using WebServer.Model.Models;
+using WebServer.Filter;
 
 namespace WebServer.Core.Controllers.Test
 {
     [ApiController]
     [Route("api/[controller]")]
+
+
     public class RedisTestController : ControllerBase
     {
         private readonly IRedisService _redis;
@@ -20,6 +23,7 @@ namespace WebServer.Core.Controllers.Test
 
         [HttpGet]
         [Route("StringGet")]
+        [LoggingActionFilter(Order = 10)]
         public async Task<HttpResultModel> TestGetString(string key)
         {
             var value = await _redis.StringGet(key);

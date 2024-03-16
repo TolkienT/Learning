@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using NetTaste;
 using System.IdentityModel.Tokens.Jwt;
 using WebServer.Common.Helpers;
+using WebServer.Filter;
 using WebServer.IService.Auth;
 using WebServer.IService.Mongo;
 using WebServer.Model.Dtos.Auth;

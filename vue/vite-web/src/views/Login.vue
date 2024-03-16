@@ -22,13 +22,12 @@
                     <el-input class="input" placeholder="请输入验证码" v-model="user.verifyCode" maxlength="4" clearable />
                     <img class="verifyCodeImg">
                 </el-form-item> -->
-                <!-- <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button> -->
-                <el-button class="btn" type="primary" @click="onShow">登录</el-button>
+                <el-button class="btn" type="primary" @click="onSubmit(ruleFormRef)">登录</el-button>
+                <!-- <el-button class="btn" type="primary" @click="onShow">登录</el-button> -->
                 <div style="text-align: right;transform:translate(0,30px);">
                     <el-link class="link" type="warning" @click="changeRegist">没有账号？去注册</el-link>
                 </div>
             </el-form>
-            <Vcode :show="isShow" @success="onSuccess" @close="onClose" />
         </div>
     </div>
 </template>
@@ -41,7 +40,6 @@ import type { Engine } from 'tsparticles-engine'
 import { login } from '@/api/security/user';
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from "element-plus";
-import Vcode from "vue3-puzzle-vcode";
 
 const particlesInit = async (engine: Engine) => {
     await loadFull(engine)
@@ -88,7 +86,10 @@ const rules = reactive({
     // verifyCode: [{ validator: validateVerification, trigger: 'blur' }],
 })
 const changeRegist = () => {
-    router.replace('/regist')
+    //replace直接替换，无法返回上一个页面
+    // router.replace('/regist')
+    
+    router.push('/regist')
 }
 
 const onSubmit = (formEl: FormInstance | undefined) => {
@@ -97,7 +98,6 @@ const onSubmit = (formEl: FormInstance | undefined) => {
     formEl.validate((valid: boolean) => {
         if (valid) {
             login(user).then((res: any) => {
-                console.log(user)
                 if (res.status == 200) {
                     window.localStorage.token = res.data.token
                     window.localStorage.expires = res.data.expiresTime
@@ -105,9 +105,9 @@ const onSubmit = (formEl: FormInstance | undefined) => {
                         message: '登录成功',
                         type: 'success'
                     })
-                    router.replace('/dashboard')
+                    router.push('/dashboard')
                 } else {
-
+                    ElMessage.error('账号或密码错误')
                 }
             }).catch(error => {
                 console.log(error)

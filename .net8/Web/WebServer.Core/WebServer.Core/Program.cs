@@ -11,6 +11,7 @@ using WebServer.IService.Mongo;
 using WebServer.Service.Mongo;
 using WebServer.IRepository.Mongo;
 using WebServer.Repository.Mongo;
+using WebServer.Filter;
 
 var builder = WebApplication.CreateBuilder(args);
 //这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
@@ -38,11 +39,17 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 builder.Services.AddSingleton(new AppSettingHelper(builder.Configuration));
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+//全局注册
+//builder.Services.AddControllers(options =>
+//{
+//    options.Filters.Add(new LoggingActionFilter());
+//});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 
 
 #region automapper
