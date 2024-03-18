@@ -13,6 +13,8 @@ namespace WebApi.Core.Filter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+
+            Console.WriteLine("OnAuthorization");
             var httpContext = context.HttpContext;
             var services = httpContext.RequestServices;
             var request = httpContext.Request;

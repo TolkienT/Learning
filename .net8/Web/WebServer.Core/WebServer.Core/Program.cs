@@ -12,6 +12,9 @@ using WebServer.Service.Mongo;
 using WebServer.IRepository.Mongo;
 using WebServer.Repository.Mongo;
 using WebServer.Filter;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 //这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
@@ -37,6 +40,22 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 
 
 builder.Services.AddSingleton(new AppSettingHelper(builder.Configuration));
+
+//添加jwt验证：
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,//是否验证Issuer
+            ValidateAudience = true,//是否验证Audience
+            ValidateLifetime = true,//是否验证失效时间
+            ValidateIssuerSigningKey = true,//是否验证SecurityKey
+            ValidAudience = "test",//Audience
+            ValidIssuer = "test",//Issuer，这两项和前面签发jwt的设置一致
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingHelper.GetApp(new string[] { "Authorization", "Jwt", "Key" })))//key
+        };
+    });
 
 // Add services to the container.
 builder.Services.AddControllers();

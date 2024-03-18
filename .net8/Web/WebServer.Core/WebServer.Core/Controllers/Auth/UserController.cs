@@ -48,7 +48,8 @@ namespace WebServer.Core.Controllers.Auth
 
         [HttpPost]
         [Route("Register")]
-        [AllowAnonymous]
+        [AuthonizationFilter]
+        //[AllowAnonymous]
         public async Task<HttpResultModel> Register([FromBody] UserRegisterDto dto)
         {
             var flag = await _userService.Register(dto);
