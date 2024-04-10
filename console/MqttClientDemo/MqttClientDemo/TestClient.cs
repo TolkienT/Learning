@@ -1,22 +1,23 @@
-﻿using MQTTnet;
-using MQTTnet.Client;
-using MQTTnet.Protocol;
+﻿using MQTTnet.Client;
+using MQTTnet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MQTTnet.Protocol;
+using MQTTnet.Server;
 
 namespace MqttClientDemo
 {
-    public class MqttClientService
+    public class TestClient
     {
         public static IMqttClient _mqttClient;
         public void MqttClientStart()
         {
             var optionsBuilder = new MqttClientOptionsBuilder()
-                .WithTcpServer("127.0.0.1", 10086) // 要访问的mqtt服务端的 ip 和 端口号
-                .WithCredentials("admin", "123456") // 要访问的mqtt服务端的用户名和密码
+                .WithTcpServer("10.249.178.179", 1888) // 要访问的mqtt服务端的 ip 和 端口号
+                .WithCredentials("jurong", "csdm8888") // 要访问的mqtt服务端的用户名和密码
                 .WithClientId("testclient" + DateTime.Now.Second) // 设置客户端id
                 .WithCleanSession()
                 .WithTls(new MqttClientOptionsBuilderTlsParameters
@@ -35,6 +36,7 @@ namespace MqttClientDemo
 
 
         }
+
 
         /// <summary>
         /// 客户端连接关闭事件
@@ -60,7 +62,7 @@ namespace MqttClientDemo
             // MqttQualityOfServiceLevel: （QoS）:  0 最多一次，接收者不确认收到消息，并且消息不被发送者存储和重新发送提供与底层 TCP 协议相同的保证。
             // 1: 保证一条消息至少有一次会传递给接收方。发送方存储消息，直到它从接收方收到确认收到消息的数据包。一条消息可以多次发送或传递。
             // 2: 保证每条消息仅由预期的收件人接收一次。级别2是最安全和最慢的服务质量级别，保证由发送方和接收方之间的至少两个请求/响应（四次握手）。
-            _mqttClient.SubscribeAsync("topic_02", MqttQualityOfServiceLevel.AtLeastOnce);
+            _mqttClient.SubscribeAsync("devices/truck/+/report/gnss", MqttQualityOfServiceLevel.AtLeastOnce);
 
             return Task.CompletedTask;
         }
@@ -72,6 +74,11 @@ namespace MqttClientDemo
         /// <returns></returns>
         private Task _mqttClient_ApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
         {
+            string text = Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
+            string gbkString = Encoding.GetEncoding("GBK").GetString(arg.ApplicationMessage.Payload);
+            string convertedString = Encoding.Unicode.GetString(arg.ApplicationMessage.Payload);
+            string isoText = Encoding.GetEncoding("ISO-8859-1").GetString(arg.ApplicationMessage.Payload);
+
             Console.WriteLine($"ApplicationMessageReceivedAsync：客户端ID=【{arg.ClientId}】接收到消息。 Topic主题=【{arg.ApplicationMessage.Topic}】 消息=【{Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}】 qos等级=【{arg.ApplicationMessage.QualityOfServiceLevel}】");
             return Task.CompletedTask;
         }
@@ -87,5 +94,7 @@ namespace MqttClientDemo
             };
             _mqttClient.PublishAsync(message);
         }
+
+
     }
 }

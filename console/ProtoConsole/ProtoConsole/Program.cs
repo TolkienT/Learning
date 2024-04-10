@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using DataUpload;
 using Google.Protobuf;
 using Test;
 
@@ -30,5 +31,13 @@ var datas = con.ToByteArray();
 //反序列化操作
 TestContact t2 = TestContact.Parser.ParseFrom(datas);
 Console.WriteLine($"反序列化2得到：{t2}");
+
+
+QuantityOfPetrolInfos
+
+
+
+
+
 
 Console.ReadKey();
