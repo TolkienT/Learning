@@ -1,0 +1,343 @@
+syntax ="proto3";
+import "mapservice/map/proto/service_map_id.proto";
+import "mapservice/map/proto/service_map.proto";
+import "mapservice/common/service_geometry.proto";
+import "mapservice/service/service_map_update.proto";
+package mapservice.service;
+/***************************************
+mqtt
+    client id mapservice 确保唯一性和正确
+功能
+1. 获取地图
+    从地图服务获取最新地图，推送到车辆。
+2. 地图查询
+    查询边界
+3. 地图存档
+    所有车辆下线了，通知地图服务存档，用于下次地图更新
+4. 心跳检测
+    检查到服务是否正常
+***********************************/
+
+//topic  map_engine/map/service/heartbeat
+
+message HeartBeat{
+    uint64 timestamp = 1;
+    AllService all_status = 2; 
+    string token = 3; //验证是否匹配的服务，timestamp　+ 项目名字（如 jurong）+"platform"通过MD5等其他hash算法计算，验证是否匹配的服务
+    string version = 4;
+}
+
+message AllService{
+    repeated AccessStatus status = 1;
+}
+
+message AccessStatus{
+    ServiceType type = 1;
+    ServiceState state = 2;
+}
+
+enum ServiceState{
+    NORMAL = 0; // 默认正常
+    INIT = 1;   // 初始化
+    ERROR = 2;  // 服务异常不可用
+}
+
+enum ServiceType{
+    UNKONW = 0; //不使用
+    BOUNDARY_QUERY = 1; //边界查询
+    ROUTE = 2; // 路由
+    BOUNDARY_UPDATE = 3;//边界更新
+    MAP_SAVE = 4;
+}
+
+// topic  platform/map/service/get
+message MapServiceGet{
+    uint64 timestamp = 1;
+    string token = 2; // timestamp　+ 项目名字（如 jurong）+"platform"通过MD5等其他hash算法计算，验证是否匹配的服务 
+    oneof services{
+        BoundaryQuery map_query= 3; 
+        MapSave map_save = 4;
+        MapGet map_update = 5;
+        RouteGet route_get = 6;
+        ManualBoundaryUpdateReq  manual_boundary_update = 7;
+        ManualBoundarySaveReq  manual_boundary_save = 8;
+    }   
+}
+
+// topic map_engine/map/service/response
+message MapServiceResponse{
+    uint64 timestamp = 1;
+    string token = 2; // timestamp　+ 项目名字（如 jurong）+"mapservice"
+    bool is_success = 3;
+    string failure_reason = 4;// 失败原因
+    oneof services{
+        BoundaryQueryAnswer map_query = 5;
+        MapSaveAnswer map_save = 6;
+        MapGetAnswer map_get = 7;
+        RouteAnswer route_anser = 8;
+        ManualBoundaryUpdateAnwser  manual_boundary_update = 9;
+        ManualBoundarySaveAnswer  manual_boundary_save = 10;
+    }
+    
+}
+
+message ManualBoundaryUpdateReq{
+    string device_name = 1;
+    MapLocalUpdate boundary = 2;
+}
+
+message ManualBoundarySaveReq{
+    string device_name = 1;
+    BoundarySaveOperate save_operate = 2;
+   
+}
+message ManualBoundaryUpdateAnwser{
+    string device_name = 1;
+}
+message ManualBoundarySaveAnswer{
+    string device_name = 1;
+    BoundarySaveOperate save_operate = 2;
+}
+enum BoundarySaveOperate {
+    UNUSE = 0;
+    SAVE = 1;
+    CANCLE = 2;
+}
+// 1.边界查询
+message BoundaryQuery{
+    EleType type = 1;// 为以后扩展其他查询使用
+    repeated mapservice.common.hdmap.Id ids = 2;
+    ProduceState produce_type = 3; // 标记
+    string truck_id = 4;
+}
+enum EleType{//查询类型，目前只支持区域查找
+    UNKNOW = 0;
+    BOUNDARY = 1;
+}
+enum ProduceState{
+    kNone = 0;
+    //卡车
+    kTravelEmpty = 1; //空车运输
+    kLoadQueuing = 2; //装载点排队
+    kLoadSpotting = 3; //装载点入换
+    kBeingLoaded = 4; //装载
+    kTravelLoaded = 5;//重车运输
+    kDumpQueuing = 6;//卸载点排队
+    kDumpSpotting = 7;//卸载点入换
+    kDumping = 8;//卸载
+
+    //铲车
+    kWaiting = 9;//等待卡车
+    kLoading = 10;//装载卡车
+
+    kRefuel = 11;//加油
+
+    kRefuelQueuing = 12;
+    kRefuelSpotting = 13;
+    kRefueling = 14;
+
+    kPark = 15;
+    kParkQueuing = 16;
+    kParkSpotting = 17;
+    kParking = 18;
+    kRemoteLoadSpotting = 19;
+    kRemoteDumpSpotting = 20;
+    kRemoteRefuelSpotting = 21;
+    kRemoteParkSpotting = 22;
+}
+
+message BoundaryQueryAnswer{
+    repeated FunctionPolygon boundary = 1; 
+    string truck_id = 2;
+}
+
+
+
+// 功能区
+message FunctionPolygon {
+    enum Type {
+      UNKNOW = 0;
+      // 禁行区域
+      FORBIDDEN_AREA=1;
+      // 卸载 开放泊车空间
+      DUMP_AREA = 2;
+      // 装载 开放泊车空间
+      LOAD_AREA = 3;
+      PARK_AREA = 4;
+      CHRAGE_AREA = 5;
+      // 路口区域
+      JUNCTION_AREA = 6;
+      WEIGHT_WAITING_AREA = 7;
+      // 开放排土区域
+      SOIL_DUMP_AREA = 8;
+    };
+  
+    mapservice.common.hdmap.Id id = 1;  
+    mapservice.common.Polygon polygon = 2;
+    Type type = 3;
+    uint32 serial_num = 4; 
+  }
+message  FunctionPolygonResponse { 
+    repeated FunctionPolygon boundary = 1; 
+}
+// 2. 地图获取
+message MapGet{
+
+}
+
+message MapGetAnswer{
+    MapGetType type = 1;
+    mapservice.common.hdmap.Map hdmap = 2;
+    UpdateItem Update_item = 3;
+    message UpdateItem {
+        repeated Type type = 1;
+    }
+    enum Type{
+       NONE = 0; // 默认值
+       ROAD = 1; // 道路
+       LANE = 2; // 车道
+       BOUNDARY = 3; // 开放空间边界，道路边界，车道边界等更新
+       SIGNAL = 4; // 信号灯	 	
+       // 是否足够
+    }
+}
+
+enum MapGetType{
+    Response = 0;
+    // 主动推送
+    Push_File = 1;
+    Push_Save = 2;
+}
+
+// 3. 地图存档
+message MapSave{
+ 
+}
+
+message MapSaveAnswer{
+    bool accepted = 1;// true 操作成功，false 操作失败
+}
+
+//4. 路由查询
+message RouteGet{
+    string truck_id = 1;
+    ProduceState produce_type = 2;
+    repeated Point waypoint = 3; // 沿用调度起点终点
+    uint32 task_type = 4; // 中台任务判定用，1：收车，2：卸载，3：装载，4：保养
+    Point parking_point = 5; // 泊车
+    uint32 session = 6; // 中台不同的查询，会话保持
+    Point working_point = 7; // 目标车位点 WorkingPose
+    Point truck_current_point = 8; // 车辆当前点(UTM坐标)
+}
+
+message RouteAnswer {
+    string truck_id = 1;
+    TruckRoutingResponse routing = 2;
+    FunctionPolygonResponse polygon = 3; // calcute route and find all overlay polygons
+    uint32 task_type = 4; // 中台任务判定用 1：收车，2：卸载，3：装载，4：保养
+    RouteGet route_get = 5; //  for debug
+    uint32 session = 6; // 中台不同的查询，会话保持
+    // 中间编号预留给类似台泥非自研调度的路由结算
+    RouteType route_type = 10; // 默认无人车
+
+    enum RouteType{
+        AUTO_DRIVE = 0;
+        MANUAL_DRIVE = 1;
+    }
+}
+
+message TruckRoutingResponse{
+    repeated RoutingPoint routing_path = 1;
+    repeated int32 intersect_point_index = 2; 
+    bool refresh = 3; // 不需要处理, 用于到拷贝到车端
+    repeated IntersectPair intersect_pair = 4;
+    repeated FunctionPointIndex function_point_index = 5;
+    LaneInfo lane_info = 6; // 车端要求 20230203
+    // PointInfo point_info = 7;
+}
+
+
+message LaneInfo{
+    string start_lane_id = 1;
+    string end_lane_id = 2;
+    repeated string land_ids = 3;
+}
+
+// message PointInfo{
+//     WeightPoint weight_point  = 1;
+//     repeated StopOverPoint stop_over_point = 2;
+//     repeated ForkPoint fork_point = 3;
+//     repeated TrafficlightPoint traffic_light_point = 4;
+// }
+// message WeightPoint{
+//     string weight_id = 1; // 地图上的过磅id
+//     dispatch.map.PointENU pathpoint = 2; // 地图上的地磅坐标点
+// }
+
+// message StopOverPoint{
+//     string map_id = 1; // 地图上的id
+//     dispatch.map.PointENU pathpoint = 2; // 地图上的临时停车点坐标点
+// }
+
+// message ForkPoint{
+//     string map_id = 1; // 地图上的id
+//     dispatch.map.PointENU pathpoint = 2; // 地图上的临时停车点坐标点
+// }
+
+// message TrafficlightPoint{
+//     string map_id = 1; // 地图上的id
+//     dispatch.map.PointENU pathpoint = 2; // 地图上的地磅坐标点
+//     string device_id = 3; // 设备ID
+// }
+
+//特定功能汇入汇出点
+message FunctionPointIndex{
+    PointType type = 1;
+    int32 point_index = 2;
+
+    enum PointType{
+        UNKNOW = 0;
+        LOADED_ENTRY_POINT = 1;// 重车汇入点
+        WEIGHT_POINT = 2; // 过磅点
+        STOP_OVER_POINT = 3; // 中途临时停车点
+        FORK_POINT = 4; // 分叉点
+        // 预留扩展
+    }
+}
+
+// 窄路会车 配对点
+message IntersectPair{
+    int32 point_index_first = 1;
+    int32 point_index_second = 2;
+    string pair_id = 3;
+}
+
+message RoutingPoint{
+
+     double x = 1;
+     double y = 2;
+     double z = 3;
+     double qx = 4;
+     double qy = 5;
+     double qz = 6;
+     double qw = 7;
+     double speed = 8;
+     double heading = 9;
+     double kappa = 10; 
+     int32 type = 11;
+
+}
+
+message Point{
+
+    double x = 1;
+    double y = 2;
+    double z = 3;
+}
+
+// 可视化备份地图，web启动时地图服务websocket异常时，通过中通http获取地图
+// map_engine/map/service/basemap
+message GeoJsonData{
+    bytes geojson = 1;
+    string type = 2; //预留
+}

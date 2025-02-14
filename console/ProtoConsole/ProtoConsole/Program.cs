@@ -33,10 +33,6 @@ TestContact t2 = TestContact.Parser.ParseFrom(datas);
 Console.WriteLine($"反序列化2得到：{t2}");
 
 
-QuantityOfPetrolInfos
-
-
-
 
 
 

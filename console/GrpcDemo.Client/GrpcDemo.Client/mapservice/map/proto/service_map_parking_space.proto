@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package mapservice.common.hdmap;
+
+import "mapservice/map/proto/service_map_geometry.proto";
+import "mapservice/map/proto/service_map_id.proto";
+
+// ParkingSpace is a place designated to park a car.
+message ParkingSpace {
+  enum Type {
+    ALL= 1;
+    CAR = 2;
+    WOMEN = 3;
+    HANDICAPPED = 4;
+    BUS = 5;
+    TRUCK = 6;
+    ELECTRIC = 7;
+    RESIDENTS = 8;
+    BUS_STATION = 9;
+    EMERGENCY_PARKING_STRIP = 10;
+    PLATFORM = 51;
+    LOADING = 52;
+  };
+  
+  optional Id id = 1;
+
+  optional Polygon polygon = 2;
+
+  repeated Id overlap_id = 3;
+
+  optional double heading = 4;
+
+  optional Type type = 100 [default = ALL];
+}
+
+// ParkingLot is a place for parking cars.
+message ParkingLot {
+  optional Id id = 1;
+
+  optional Polygon polygon = 2;
+
+  repeated Id overlap_id = 3;
+}

@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package mapservice.common.hdmap;
+
+import "mapservice/common/service_geometry.proto";
+import "mapservice/map/proto/service_map_id.proto";
+
+message MarkPoint {
+  enum Type {
+    ENTRANCE_RAMP = 1;
+    TOLL_GATE_IN = 2;
+    TOLL_GATE_OUT = 3;
+    TUNNEL_IN = 4;
+    TUNNEL_OUT = 5;
+    RAMP_ENTRY_POINT = 6;
+    INTERSECT_ENTRY_POINT = 7;
+    DUMP_WORKING_POSE = 8;//卸载点
+    WEIGHING_POINT = 9;
+    STOPOVER_POINT = 10;// 中途停车点
+    MAINTENANCE_POINT = 11;
+  };
+
+  optional Id id = 1;
+  optional Type type = 2;
+  optional mapservice.common.PointENU position = 3;
+  repeated Id overlap_id = 4;
+}

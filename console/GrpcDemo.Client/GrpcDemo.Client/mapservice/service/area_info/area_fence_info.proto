@@ -1,0 +1,63 @@
+syntax = "proto3";
+import "mapservice/proto/common/service_geometry.proto";
+
+package mapservice.area_info;
+
+// common/geojson.proto
+// // A point in the global reference frame. Similar to PointENU, PointLLH allows
+// // omitting the height field for representing a 2D location.
+// message PointLLH {
+//   // Longitude in degrees, ranging from -180 to 180.
+//   optional double lon = 1 [default = nan];
+//   // Latitude in degrees, ranging from -90 to 90.
+//   optional double lat = 2 [default = nan];
+//   // WGS-84 ellipsoid height in meters.
+//   optional double height = 3 [default = 0.0];
+// }
+
+message AreaBoundaryInfo{
+    string area_id=1;
+    repeated mapservice.common.PointLLH area_points=2;
+}
+
+// 切换地图时，会推送当前地图的所有区域
+// mqtt: /mapservice/platfrom/map_area_boundary/points
+message AreaBoundaryPoints {
+    repeated AreaBoundaryInfo area_boundary_points = 1;
+}
+
+// 地图服务提供，以供中台调用
+service AreaFenceInfo {
+    // 检查坐标是否在区域内
+    rpc CheckPointInArea (CheckPointInAreaReq) returns (CheckPointInAreaResp);
+    // 通过area_ids获取一系列区域边界点集
+    rpc GetAreaBoundaryPoints (GetAreaBoundaryPointsReq) returns (GetAreaBoundaryPointsResp);
+  }
+
+
+// CheckPointInArea
+message TruckPoint{
+    mapservice.common.PointLLH point = 1;
+}
+message CheckPointInAreaReq{
+    TruckPoint truck_point=1;
+    repeated string area_ids=2;
+}
+message CheckPointInAreaResp{
+    uint32 res_code=1;
+    string res_msg=2;
+}
+
+// GetAreaBoundaryPoints
+message GetAreaBoundaryPointsReq{
+    repeated string area_ids=1;
+}
+
+message GetAreaBoundaryPointsResp{
+    uint32 res_code=1;
+    string res_msg=2;
+    repeated AreaBoundaryInfo res_data=3;
+}
+
+
+

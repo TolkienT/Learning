@@ -1,0 +1,34 @@
+syntax = "proto3";
+import "mapservice/common/service_base_status.proto";
+
+package mapservice.monitor;
+
+// publish_front_request_api_report_topic
+// topic: "mapservice/platform/front_request_api_report"
+message ReportMapserviceHandleResult {
+  string request_client_addr = 1;
+  uint64 timestamp = 2;
+  string request_api_name = 3;
+  string request_params_raw = 4;
+  int32 response_status = 5;
+  mapservice.common.ResponseStatus response_status_meaning = 6;
+}
+
+// publish_dumping_state_set_report_topic
+// topic: "mapservice/platform/front_request_api_report/dumping_state_set"
+message ReportDumpingStateHandleResult {
+  uint64 timestamp = 1;
+  repeated string soil_dump_park_id = 2; 
+  repeated string soil_dump_park_name = 3; 
+  optional string area_id = 4;
+  optional string mark_point_id = 5;
+  uint32 dispatch_state = 6;
+  ResponseStatus response_status = 7;
+  message ResponseStatus{
+    int32 res_code = 1;	
+    string res_msg = 2;
+  }
+  optional string request_client_addr = 8;
+  optional string request_params_raw = 9;
+}
+

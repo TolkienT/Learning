@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package mapservice.common.hdmap;
+
+import "mapservice/common/service_geometry.proto";
+import "mapservice/map/proto/service_map_id.proto";
+
+message Remark {
+  enum Type {
+    OTHER= 0;
+    URGENCY_PARKING_STRIP= 1;
+    EMERGENCY_LANE_WIDTH= 2;
+    LANE_NUM= 3;
+    BYPASS_COLLECTION = 4;
+  };
+
+  optional Id id = 1;
+  optional Type type = 2;
+  optional mapservice.common.PointENU position = 3;
+  optional string msg = 4;
+  repeated Id overlap_id = 5;
+}

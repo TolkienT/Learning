@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "mapservice/map/proto/service_map.proto";
+import "mapservice/map/proto/service_map_id.proto";
+package mapservice.service;
+//修改时间20211221
+
+message MapUpdate // 中台下发地图到矿卡，接收局部更新
+{
+   int32 version = 1;
+   uint64 timestamp = 2;
+   bool is_publish = 3; // 下发地图为true  
+   mapservice.common.hdmap.Map map = 4;//Map 为高清地图协议，按照最新的协议更是确认，下发方填写
+   FailureCode failure_code = 5;// 需要新增; 下发方不需要填，接收方反馈是否成功。如果失败，发送方重新下发或记录上报地图失败    
+}
+
+enum FailureCode{
+	OK = 0; // 更新成功
+	FAILURE = 1; // 信息不完整，解析失败
+	INCORRECT = 2; // 地图内容不合格；道路信息或关联缺少等等	
+} 
+
+
+message MapLocalUpdate {
+	uint64 timestamp = 1;
+	bool is_update = 2; // 更新开放空间区域，设置为true。false为反馈接收地图状态
+	MarkPolygon mark_polygon = 3; // 更新局部区域时is_update=true，需要填写
+	FailureCode failure_code = 4;//  下发方不需要填，接收方反馈是否成功。如果失败，发送方重新下发或记录上报地图失败故障。
+   string device_id = 5;	
+}
+
+ message MarkPolygon {
+    mapservice.common.hdmap.Id id = 1;  
+    Polygon polygon = 2;
+    uint32 serial_num = 3;// 2022/02/15 车辆标记服务下发的更新前的编号，区分车端是否； 
+ }
+ message Polygon {
+ 	repeated Point3D point = 1;
+ }
+ message Point3D {
+      double x = 1 ;
+      double y = 2 ;
+      double z = 3 ;
+ }

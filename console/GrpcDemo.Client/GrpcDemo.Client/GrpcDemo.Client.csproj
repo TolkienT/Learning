@@ -22,8 +22,9 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
-		<Protobuf Include="Protos\order.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\greet.proto" GrpcServices="Both" />
+		<Protobuf Include="Protos\order.proto" GrpcServices="Both" />
+		<Protobuf Include="Protos\area_fence_info.proto" GrpcServices="Both" />
 	</ItemGroup>
 
 </Project>

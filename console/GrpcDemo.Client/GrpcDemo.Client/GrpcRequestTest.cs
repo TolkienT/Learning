@@ -57,5 +57,28 @@ namespace GrpcDemo.Client
         }
 
 
+        public static void SayHello()
+        {
+            try
+            {
+                //常规使用，https
+                string url = "https://localhost:7059";
+                using (var channel = GrpcChannel.ForAddress(url))
+                {
+                    var client = new Greeter.GreeterClient(channel);
+                    var reply = client.SayHello(new HelloRequest() { });
+
+                    Console.WriteLine($"结果:{reply.ToString},message:{reply.Message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+
+        }
+
+
     }
 }

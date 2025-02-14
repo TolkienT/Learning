@@ -1,0 +1,112 @@
+syntax ="proto3";
+// import "mapservice/map/proto/map_id.proto";
+import "mapservice/map/proto/service_map.proto";
+package mapservice.manage;
+
+/***************
+地图更新
+
+
+******************/
+// topic tool/map/info/get
+message InfoGet{
+    uint64 timestamp = 1;
+    string token = 2;
+    oneof action{
+        MapQuery map_query = 3; // 地图查询
+        MapDataSet map_set = 4; // 地图上传
+        MapDataGet map_get = 5;// 下载指定的地图数据
+        MapSetUsing set_using = 6;
+    }
+}
+
+
+// topic tool/map/info/answer
+message InfoAnser{
+    uint64 timestamp = 1;
+    string token = 2;
+    string reason_failure = 3;
+    oneof action{
+        MapQueryAnser map_query_anser = 4;// 查询地图
+        MapDataSetAnser mapset_anser = 5;// 地图上传
+        MapDataGetAnser map_get = 6;// 下载指定的地图数据
+        MapSetUsingAnser set_using = 7;
+    } 
+    
+}
+
+// info get
+message MapQuery {
+
+}
+
+message MapDataGet {
+    uint32 id = 1;
+}
+
+message MapDataSet {
+    oneof action{
+        MapData map_data = 1;
+    }
+}
+
+message MapData{
+    string author = 1;
+    string file_name = 2;
+    string comment = 3;
+    mapservice.common.hdmap.Map hdmap = 4; 
+    MapChangedItems changed_items = 5;
+}
+
+// info anser
+message MapQueryAnser{
+    repeated DetailInfo info =1;
+}
+
+message DetailInfo{
+    uint32 id = 1;
+    uint64 first_timestamp = 2;
+    bool approved = 3;
+    bool is_using = 4;
+    uint64 last_timestamp = 5;
+    string author = 6;
+    string file_name = 7;
+    string version = 8;
+    string comment = 9;
+    MapChangedItems changed_items = 10;
+}
+
+message MapChangedItems{
+    repeated Type type = 1;
+  
+}
+enum Type{
+    NONE = 0; // 默认值
+    ROAD = 1; // 道路
+    LANE = 2; // 车道
+    BOUNDARY = 3; // 开放空间边界，道路边界，车道边界等更新
+    SIGNAL = 4; // 信号灯	 	
+    // 是否足够
+ }
+
+message MapDataGetAnser{
+    uint32 id = 1;
+    mapservice.common.hdmap.Map hdmap = 2; 
+    MapChangedItems changed_items = 3;
+}
+
+
+
+message MapDataSetAnser{
+    bool success = 1;
+    uint32 id = 2;
+}
+
+message MapSetUsing{
+    uint32 id = 1;   
+}
+
+message MapSetUsingAnser{
+    bool success = 1;
+    uint32 id = 2;  
+}

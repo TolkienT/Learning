@@ -134,5 +134,29 @@ namespace ExcelTest
             }
         }
 
+        public static void ToExcelIncrement(long num, string file)
+        {
+            IWorkbook workbook = new XSSFWorkbook();
+            ISheet sheet = workbook.CreateSheet("sheet");
+            IRow rows = null;
+
+            for (int i = 0; i < 400; i++)
+            {
+                rows = sheet.CreateRow(i);
+                rows.CreateCell(0).SetCellValue(num + i + "");
+            }
+
+            //转为字节数组  
+            MemoryStream stream = new MemoryStream();
+            workbook.Write(stream);
+            var buf = stream.ToArray();
+            //保存为Excel文件  
+            using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                fs.Write(buf, 0, buf.Length);
+                fs.Flush();
+            }
+        }
+
     }
 }

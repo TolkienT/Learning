@@ -1,0 +1,14 @@
+syntax = "proto3";
+package mapservice.common;
+
+enum ResponseStatus {
+  OK = 0;                     // 成功 （!=0，表示不同的错误类型）
+  FAILED = -1;                // 未指明失败 
+  FAILED_PARAMS_ERROR = 1;    // 参数错误
+  FAILED_SYSTEM_ERROR = 2;    // 系统错误
+
+  FAILED_PARAMS_FORMAT_ERROR = 10;    // 参数格式错误
+  FAILED_PARAMS_INVALID = 11;         // 参数内容无效，校验失败
+  FAILED_MAPSERVICE_ERROR = 20;       // 地图服务系统异常
+  FAILED_DISPATCHSERVICE_ERROR = 21;  // 调度服务系统异常
+}

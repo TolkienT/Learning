@@ -4,6 +4,6 @@ using GrpcDemo.Client;
 //GrpcRequestTest.CreateOrder();
 GrpcRequestTest.QueryOrder();
 
-
+GrpcRequestTest.SayHello();
 
 Console.ReadKey();
