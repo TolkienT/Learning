@@ -8,8 +8,6 @@ namespace WebServer.Core.Controllers.Test
 {
     [ApiController]
     [Route("api/[controller]")]
-
-
     public class RedisTestController : ControllerBase
     {
         private readonly IRedisService _redis;
