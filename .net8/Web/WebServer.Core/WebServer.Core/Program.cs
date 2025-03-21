@@ -15,6 +15,9 @@ using WebServer.Filter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebServer.Utilities;
+using MongoDB.Driver.Core.Connections;
+using WebServer.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 //这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
@@ -144,6 +147,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseWebSockets();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/ws" && context.WebSockets.IsWebSocketRequest)
+    {
+        using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+        var connectionId = Guid.NewGuid().ToString();
+        RunTimeSharedData.WebSocketConnections.TryAdd(connectionId, webSocket);
+        await WebsocketHelper.HandleWebSocketConnection(connectionId, webSocket);
+
+        RunTimeSharedData.WebSocketConnections.TryRemove(connectionId, out _);
+        Console.WriteLine($"Client disconnected: {connectionId}");
+    }
+    else
+    {
+        await next();
+    }
+});
 
 app.UseAuthorization();
 

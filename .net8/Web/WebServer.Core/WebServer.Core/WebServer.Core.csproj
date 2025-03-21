@@ -15,6 +15,7 @@
     <ProjectReference Include="..\WebServer.Extensions\WebServer.Extensions.csproj" />
     <ProjectReference Include="..\WebServer.Filter\WebServer.Filter.csproj" />
     <ProjectReference Include="..\WebServer.Service\WebServer.Service.csproj" />
+    <ProjectReference Include="..\WebServer.Utilities\WebServer.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
