@@ -18,6 +18,7 @@ using System.Text;
 using WebServer.Utilities;
 using MongoDB.Driver.Core.Connections;
 using WebServer.Cache;
+using WebServer.Common.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 //这里是替换容器的，微软默认的注入方式是DI，替换成autofac实例
@@ -109,6 +110,9 @@ builder.Services.AddSingleton<IRedisService, RedisServiceImpl>();
 
 builder.Services.AddSingleton<LoginLogService>();
 
+// 添加 SignalR 服务
+builder.Services.AddSignalR();
+
 #region CORS
 builder.Services.AddCors(options =>
 {
@@ -166,6 +170,9 @@ app.Use(async (context, next) =>
         await next();
     }
 });
+
+// 配置 SignalR Hub 路由
+app.MapHub<MessageHub>("/chatHub");
 
 app.UseAuthorization();
 

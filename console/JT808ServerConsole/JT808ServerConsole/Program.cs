@@ -93,9 +93,25 @@ JT808Helper.Init();
 
 
 
+JT808Package testjT808Package = new()
+{
+    Header = new JT808Header()
+    {
+        MsgId = JT808.Protocol.Enums.JT808MsgId._0x8300.ToUInt16Value(),
+        MsgNum = 0,
+        TerminalPhoneNo = ByteArrayHelper.FillZero("10645080158", 12),
+    }
+};
+JT808_0x8300 jT808TextSend = new JT808_0x8300
+{
+    TextInfo = "*OTA7777175.178.97.207,11009,CK508C45.bin#",
+    TextFlag = 0
+};
+testjT808Package.Bodies = jT808TextSend;
 
-
-
+var res = JT808Helper.JT808Serializer.Serialize(testjT808Package);
+string testStr111= ByteArrayHelper.ByteArrayToHex(res);
+Console.WriteLine(testStr111);
 
 
 

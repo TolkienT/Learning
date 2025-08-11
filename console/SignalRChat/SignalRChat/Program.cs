@@ -7,6 +7,22 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddSignalR();
 
+#region CORS
+builder.Services.AddCors(options =>
+{
+    //允许任意跨域请求
+    options.AddPolicy("CorsPolicy",
+        policy =>
+        {
+            policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
+});
+
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

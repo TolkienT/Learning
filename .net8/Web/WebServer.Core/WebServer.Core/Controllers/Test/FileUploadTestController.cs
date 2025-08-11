@@ -157,5 +157,22 @@ namespace WebServer.Core.Controllers.Test
             }
         }
 
+        [HttpGet]
+        public async Task<HttpResultModel> GetTestResult()
+        {
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(10000); // 模拟耗时操作
+                Console.WriteLine("测试数据");
+            });
+            await Task.Delay(1000);
+            return new HttpResultModel()
+            {
+                Status = HttpResultStatus.OK,
+                Success = true,
+            };
+        }
+
     }
 }
